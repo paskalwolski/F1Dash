@@ -1,0 +1,18 @@
+Seasons : [
+  Races: [
+    Drivers: [
+      Laptimes: [], 
+      Pitstops: [], 
+      Result,
+      Standing, 
+      ?SprintResult, 
+      Status,  
+    ], 
+    Constructors: [
+      Result, 
+      Standing,
+    ], 
+    Circuit,
+
+  ]
+]
