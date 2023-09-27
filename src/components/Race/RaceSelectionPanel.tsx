@@ -1,8 +1,8 @@
 // import { Typography } from "@mui/material";
 import React, { useState } from "react";
 import { Race, RaceTable } from "../../global";
-import { Grid, Box } from "@mui/material";
-import { RaceCard } from "./RaceCard/RaceCard.component";
+import { Grid } from "@mui/material";
+import { RaceCard } from "./RaceCard.component";
 import { RaceDisplay } from "./RaceDisplay.component";
 
 interface props {
@@ -26,18 +26,10 @@ export const RaceSelectionPanel = ({
   // SelectRace, SelectSeason, ViewRace ?
 
   return (
-    <Grid
-      container
-      sx={{
-        // display: "flex",
-        // flexDirection: "column",
-        // alignItems: "center",
-        margin: 2,
-      }}
-      // style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <Grid container spacing="8px" padding="8px">
       <Grid
-        md={selectedTab == selectedPanel.display ? 10 : 2}
+        md={10}
+        xs={12}
         onClick={() => setSelectedTab(selectedPanel.display)}
         item
       >
@@ -47,20 +39,25 @@ export const RaceSelectionPanel = ({
           <div>Please select a race</div>
         )}
       </Grid>
-      <Grid md={selectedTab == selectedPanel.race ? 10 : 2} item>
-        <div
-          style={{ height: "100vh", overflowX: "hidden", overflowY: "auto" }}
-        >
-          {seasonRaceTable.Races.map((race, i) => (
+      <Grid
+        md={2}
+        container
+        item
+        spacing={1}
+        overflow={"scroll"}
+        maxHeight={"90vh"}
+      >
+        {seasonRaceTable.Races.map((race, i) => (
+          <Grid item width={"100%"}>
             <RaceCard
-              onClick={() => {
+              actionAreaClick={() => {
                 setSelectedTab(selectedPanel.race);
               }}
               key={"raceCard" + i}
               {...{ race, selectRace: setSelectedRace }}
             />
-          ))}
-        </div>
+          </Grid>
+        ))}
       </Grid>
     </Grid>
   );
