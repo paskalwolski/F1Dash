@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Race } from "../../global";
-import { Box, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 
 interface propTypes {
   race: Race;
@@ -17,7 +17,7 @@ export const RaceDisplay = ({ race }: propTypes) => {
     useState<RaceInformation>(RaceInformation.blank);
 
   return (
-    <Box sx={{ border: 4, borderRadius: 3, p: 2, bgcolor: "primary"}}>
+    <Box sx={{ border: 4, borderRadius: 3, p: 2, bgcolor: "primary" }}>
       <Typography variant="h3" sx={{ pb: 1 }}>
         {race.raceName}
       </Typography>
@@ -40,17 +40,25 @@ export const RaceDisplay = ({ race }: propTypes) => {
           </Typography>
         )}
       </Box>
-      <button
-        onClick={() => {
-          setRaceInfoDisplayFlag(raceInfoDisplayFlag + 1);
-        }}
-      >
-        Click here to see results
-      </button>
       <Box>
+        <Tabs
+          value={raceInfoDisplayFlag}
+          onChange={(_, v) => {
+            setRaceInfoDisplayFlag(RaceInformation.[])
+          }}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Item One" />
+          <Tab label="Item Two" />
+          <Tab label="Item Three" />
+        </Tabs>
         {
           {
-            [RaceInformation.blank]: <>Hello!</>,
+            [RaceInformation.blank]: (
+              <Typography variant="body2">
+                Choose some Race Details to View
+              </Typography>
+            ),
             [RaceInformation.results]: <>Results go here!</>,
             [RaceInformation.season]: <>Season goes here!</>,
           }[raceInfoDisplayFlag]

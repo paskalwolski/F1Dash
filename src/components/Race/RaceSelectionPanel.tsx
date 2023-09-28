@@ -23,7 +23,6 @@ export const RaceSelectionPanel = ({
   setSelectedRace,
 }: props) => {
   const [selectedTab, setSelectedTab] = useState(selectedPanel.display);
-  // SelectRace, SelectSeason, ViewRace ?
 
   return (
     <Grid container spacing="8px" padding="8px">
@@ -48,12 +47,12 @@ export const RaceSelectionPanel = ({
         maxHeight={"90vh"}
       >
         {seasonRaceTable.Races.map((race, i) => (
-          <Grid item width={"100%"}>
+          <Grid item width={"100%"} key={i}>
             <RaceCard
               actionAreaClick={() => {
                 setSelectedTab(selectedPanel.race);
               }}
-              key={"raceCard" + i}
+              key={i}
               {...{ race, selectRace: setSelectedRace }}
             />
           </Grid>
