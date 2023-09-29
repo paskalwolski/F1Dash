@@ -1,36 +1,38 @@
-import { useEffect, useState } from "react";
+import { useReducer } from "react";
 
 import { RaceSelectionPanel } from "./RaceSelectionPanel";
-import { Race, RaceTable } from "../../global";
-import { Box } from "@mui/material";
-export const RaceView = () => {
-  const [seasonRaceTable, setSeasonRaceTable] = useState<RaceTable>({
-    season: "",
-    Races: [],
-  });
-  const [selectedRace, setSelectedRace] = useState<Race>();
-  const [selectedTab, setSelectedTab] = useState("Race");
+import { Race, RaceInformationTabs, RaceTable } from "../../global";
+import { RaceState } from "../../contexts/contexts";
+import { RaceContext } from "../../contexts/ContextProvider";
 
-  useEffect(() => {
-    fetch("http://ergast.com/api/f1/current.json")
-      .then((res) => res.json())
-      .then((seasonData) => {
-        setSeasonRaceTable(seasonData?.["MRData"]?.["RaceTable"]);
-        setSelectedRace(
-          seasonData?.["MRData"]?.["RaceTable"].Races[
-            seasonData?.["MRData"]?.["RaceTable"].Races.length - 1
-          ]
-        );
-      });
-  }, []);
+import { RaceReducer } from "../../contexts/race/raceReducer";
 
-  useEffect(() => {}, [selectedTab]);
+interface PropTypes {
+  seasonRaceTable: RaceTable;
+}
+
+export const RaceView = ({ seasonRaceTable }: PropTypes) => {
+  // const [selectedRace, setSelectedRace] = useState<Race>();
+
+  const initialRaceState: RaceState = {
+    selectedRace: seasonRaceTable.Races[
+      seasonRaceTable.Races.length - 1
+    ] as Race,
+    raceInfoTab: RaceInformationTabs.details,
+  };
+  const [raceState, dispatch] = useReducer(RaceReducer, initialRaceState);
+
+  // setSelectedRace(
+  //   seasonData?.["MRData"]?.["RaceTable"].Races[
+  //     seasonData?.["MRData"]?.["RaceTable"].Races.length - 1
+  //   ]
+  // );
 
   return (
-    <Box>
+    <RaceContext.Provider value={{ state: raceState, dispatch: dispatch }}>
       <RaceSelectionPanel
         {...{ selectedRace, setSelectedRace, seasonRaceTable }}
       />
-    </Box>
+    </RaceContext.Provider>
   );
 };

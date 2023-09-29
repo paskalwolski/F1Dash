@@ -32,9 +32,9 @@ export const RaceCard = ({
       sx={{
         borderStyle: "solid",
         borderWidth: "3px",
-        borderColor: "secondary.main",
+        borderColor: "primary.main",
         borderRadius: "5px",
-        backgroundColor: "info.dark",
+        // backgroundColor: "info.dark",
       }}
     >
       <CardActionArea

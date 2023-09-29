@@ -78,3 +78,9 @@ export interface Session {
   date: string;
   time: string;
 }
+
+export enum RaceInformationTabs {
+  details = "Details",
+  results = "Results",
+  standings = "Standings",
+}
