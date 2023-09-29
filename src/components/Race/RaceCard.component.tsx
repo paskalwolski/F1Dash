@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Race } from "../../global";
 import {
   Card,
@@ -12,7 +10,7 @@ import {
 
 interface propTypes {
   race: Race;
-  selectRace: React.Dispatch<React.SetStateAction<Race | undefined>>;
+  // selectRace: React.Dispatch<React.SetStateAction<Race | undefined>>;
   displayOnly?: boolean;
   actionAreaClick?: CallableFunction;
   resultButtonClickAction?: CallableFunction;
@@ -21,7 +19,7 @@ interface propTypes {
 
 export const RaceCard = ({
   race,
-  selectRace,
+  // selectRace,
   displayOnly,
   actionAreaClick,
   resultButtonClickAction,
@@ -44,7 +42,7 @@ export const RaceCard = ({
             : () => {
                 actionAreaClick && actionAreaClick();
                 console.log("Selecting " + race.raceName);
-                selectRace(race);
+                // selectRace(race);
               }
         }
       >

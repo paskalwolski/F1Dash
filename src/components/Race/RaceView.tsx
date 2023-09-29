@@ -1,8 +1,8 @@
 import { useReducer } from "react";
 
 import { RaceSelectionPanel } from "./RaceSelectionPanel";
-import { Race, RaceInformationTabs, RaceTable } from "../../global";
-import { RaceState } from "../../contexts/contexts";
+import { Race, RaceTable } from "../../global";
+import { RaceInformationTabs, RaceState } from "../../contexts/context.types";
 import { RaceContext } from "../../contexts/ContextProvider";
 
 import { RaceReducer } from "../../contexts/race/raceReducer";
@@ -15,6 +15,7 @@ export const RaceView = ({ seasonRaceTable }: PropTypes) => {
   // const [selectedRace, setSelectedRace] = useState<Race>();
 
   const initialRaceState: RaceState = {
+    seasonRaceTable: seasonRaceTable,
     selectedRace: seasonRaceTable.Races[
       seasonRaceTable.Races.length - 1
     ] as Race,
@@ -30,9 +31,7 @@ export const RaceView = ({ seasonRaceTable }: PropTypes) => {
 
   return (
     <RaceContext.Provider value={{ state: raceState, dispatch: dispatch }}>
-      <RaceSelectionPanel
-        {...{ selectedRace, setSelectedRace, seasonRaceTable }}
-      />
+      <RaceSelectionPanel />
     </RaceContext.Provider>
   );
 };

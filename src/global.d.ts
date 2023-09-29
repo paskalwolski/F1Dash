@@ -1,11 +1,11 @@
-export interface Season {
+export type Season = {
   season: string;
   url: string;
   Races: Race[];
   season?: string;
-}
+};
 
-export interface Race {
+export type Race = {
   Circuit: Circuit;
   Qualifying: Session;
   FirstPractice: Session;
@@ -17,14 +17,14 @@ export interface Race {
   date: string;
   time: string;
   url: string;
-}
+};
 
-export interface RaceTable {
+export type RaceTable = {
   season: string;
   Races: Race[];
-}
+};
 
-export interface Circuit {
+export type Circuit = {
   circuitId: string;
   url: string;
   circuitName: string;
@@ -34,9 +34,9 @@ export interface Circuit {
     locality: string;
     country: string;
   };
-}
+};
 
-export interface Result {
+export type Result = {
   number: string;
   position: string;
   positionText: string;
@@ -61,9 +61,9 @@ export interface Result {
       speed: string;
     };
   };
-}
+};
 
-export interface Driver {
+export type Driver = {
   driverId: string;
   permanentNumber: string;
   code: string;
@@ -72,15 +72,9 @@ export interface Driver {
   familyName: string;
   dateOfBirth: string;
   nationality: string;
-}
+};
 
-export interface Session {
+export type Session = {
   date: string;
   time: string;
-}
-
-export enum RaceInformationTabs {
-  details = "Details",
-  results = "Results",
-  standings = "Standings",
-}
+};

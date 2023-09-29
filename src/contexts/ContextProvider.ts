@@ -1,4 +1,4 @@
 import { createContext } from "react";
-import { RaceContextTypes } from "./contexts";
+import { RaceContextTypes } from "./context.types";
 
-export const RaceContext = createContext<RaceContextTypes | null>(null);
+export const RaceContext = createContext<RaceContextTypes>({});
