@@ -22,16 +22,9 @@ export const RaceSelectionPanel = ({
   selectedRace,
   setSelectedRace,
 }: props) => {
-  const [selectedTab, setSelectedTab] = useState(selectedPanel.display);
-
   return (
     <Grid container spacing="8px" padding="8px">
-      <Grid
-        md={10}
-        xs={12}
-        onClick={() => setSelectedTab(selectedPanel.display)}
-        item
-      >
+      <Grid md={10} xs={12} item>
         {selectedRace ? (
           <RaceDisplay {...{ race: selectedRace }} />
         ) : (

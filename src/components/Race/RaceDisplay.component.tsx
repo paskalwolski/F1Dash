@@ -1,66 +1,76 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Race } from "../../global";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 
-interface propTypes {
+interface PropTypes {
   race: Race;
 }
 
 enum RaceInformation {
-  blank,
-  results,
-  season,
+  details = "Details",
+  results = "Results",
+  standings = "Standings",
 }
 
-export const RaceDisplay = ({ race }: propTypes) => {
+export const RaceDisplay = ({ race }: PropTypes) => {
   const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
-    useState<RaceInformation>(RaceInformation.blank);
+    useState<RaceInformation>(RaceInformation.details);
+
+  useEffect(() => {
+    console.log(raceInfoDisplayFlag);
+  }, [raceInfoDisplayFlag]);
 
   return (
-    <Box sx={{ border: 4, borderRadius: 3, p: 2, bgcolor: "primary" }}>
+    <Box sx={{ border: 1, borderRadius: 3, p: 2, pl: 4, bgcolor: "primary" }}>
       <Typography variant="h3" sx={{ pb: 1 }}>
         {race.raceName}
       </Typography>
-      <Box sx={{ ml: 2 }}>
+      <div style={{ display: "flex" }}>
+        <Typography variant="subtitle1" fontWeight={100} pr={1}>
+          Round {race.round} |
+        </Typography>
         <Typography variant="subtitle1">
-          Held at the {race.Circuit.circuitName} on {race.date}
+          {race.Circuit.circuitName} on {race.date}
         </Typography>
-        <Typography variant="body1">
-          Qualifying: {race.Qualifying.time}
-        </Typography>
-        <Typography variant="body2">
-          First Practice: {race.FirstPractice.time}
-        </Typography>
-        <Typography variant="body2">
-          Second Practice: {race.SecondPractice.time}
-        </Typography>
-        {race.ThirdPractice && (
-          <Typography variant="body2">
-            Third Practice: {race.ThirdPractice.time}
-          </Typography>
-        )}
-      </Box>
+      </div>
       <Box>
         <Tabs
           value={raceInfoDisplayFlag}
-          onChange={(_, v) => {
-            setRaceInfoDisplayFlag(RaceInformation.[])
+          onChange={(_, v: RaceInformation) => {
+            setRaceInfoDisplayFlag(v);
           }}
-          aria-label="basic tabs example"
+          sx={{ pl: 2 }}
         >
-          <Tab label="Item One" />
-          <Tab label="Item Two" />
-          <Tab label="Item Three" />
+          {Object.values(RaceInformation).map((raceInfo: string) => {
+            // const raceInfoVal = raceInfo as keyof typeof RaceInformation;
+            return (
+              // <Tab label={RaceInformation[raceInfoVal]} value={raceInfoVal} />
+              <Tab label={raceInfo} value={raceInfo} key={raceInfo} />
+            );
+          })}
         </Tabs>
         {
           {
-            [RaceInformation.blank]: (
-              <Typography variant="body2">
-                Choose some Race Details to View
-              </Typography>
+            [RaceInformation.details]: (
+              <Box sx={{ ml: 2 }}>
+                <Typography variant="body1">
+                  Qualifying: {race.Qualifying.time}
+                </Typography>
+                <Typography variant="body2">
+                  First Practice: {race.FirstPractice.time}
+                </Typography>
+                <Typography variant="body2">
+                  Second Practice: {race.SecondPractice.time}
+                </Typography>
+                {race.ThirdPractice && (
+                  <Typography variant="body2">
+                    Third Practice: {race.ThirdPractice.time}
+                  </Typography>
+                )}
+              </Box>
             ),
             [RaceInformation.results]: <>Results go here!</>,
-            [RaceInformation.season]: <>Season goes here!</>,
+            [RaceInformation.standings]: <>Season goes here!</>,
           }[raceInfoDisplayFlag]
         }
       </Box>
