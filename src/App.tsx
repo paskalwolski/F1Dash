@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 
 //MUI Components
 import Typography from "@mui/material/Typography";
-import { AppBar, Hidden, Toolbar, Box } from "@mui/material";
+import { AppBar, Toolbar } from "@mui/material";
 import { Bolt } from "@mui/icons-material";
 
 // Types

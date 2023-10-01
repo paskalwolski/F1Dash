@@ -4,6 +4,7 @@ import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceInformationTabs } from "../../contexts/context.types";
 import { RaceActions } from "../../contexts/race/raceReducer.actions";
+import { RaceDetails } from "./RaceDetails.component";
 
 interface PropTypes {
   race: Race;
@@ -61,30 +62,15 @@ export const RaceDisplay = ({ race }: PropTypes) => {
             key={RaceInformationTabs.standings}
           />
         </Tabs>
-        {
+        <Box sx={{ padding: "8px" }}>
           {
-            [RaceInformationTabs.details]: (
-              <Box sx={{ ml: 2 }}>
-                <Typography variant="body1">
-                  Qualifying: {race.Qualifying.time}
-                </Typography>
-                <Typography variant="body2">
-                  First Practice: {race.FirstPractice.time}
-                </Typography>
-                <Typography variant="body2">
-                  Second Practice: {race.SecondPractice.time}
-                </Typography>
-                {race.ThirdPractice && (
-                  <Typography variant="body2">
-                    Third Practice: {race.ThirdPractice.time}
-                  </Typography>
-                )}
-              </Box>
-            ),
-            [RaceInformationTabs.results]: <>Results go here!</>,
-            [RaceInformationTabs.standings]: <>Season goes here!</>,
-          }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]
-        }
+            {
+              [RaceInformationTabs.details]: <RaceDetails />,
+              [RaceInformationTabs.results]: <>Results go here!</>,
+              [RaceInformationTabs.standings]: <>Season goes here!</>,
+            }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]
+          }
+        </Box>
       </Box>
     </Box>
   );
