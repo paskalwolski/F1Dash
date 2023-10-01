@@ -5,6 +5,8 @@ import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceInformationTabs } from "../../contexts/context.types";
 import { RaceActions } from "../../contexts/race/raceReducer.actions";
 
+import { CarLoader } from "../CarLoader/CarLoader";
+
 interface PropTypes {
   race: Race;
 }

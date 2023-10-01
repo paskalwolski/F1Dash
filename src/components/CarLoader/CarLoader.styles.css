@@ -1,0 +1,35 @@
+.track {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.loader-window {
+  overflow: hidden;
+  position: relative;
+}
+
+.loader-window .track {
+  /* animation: transform 500ms ease-in-out; */
+  /* background-color: red; */
+  /* transform: enter-animate; */
+  animation: enter-animate 1s ease-in-out;
+}
+
+.attribution {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  font-size: xx-small;
+}
+
+/* @keyframes exti; */
+@keyframes enter-animate {
+  from {
+    transition: ease-in;
+    transform: translateX(-100%) skew(-10deg);
+  }
+  to {
+    transform: translateX(0) skew(0deg);
+  }
+}
