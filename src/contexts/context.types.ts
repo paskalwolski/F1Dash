@@ -3,9 +3,8 @@ import { Race, RaceTable } from "../global.js";
 import { RaceActionTypes } from "./race/raceReducer.actions.js";
 
 export type RaceState = {
-  raceLoading: boolean;
-  seasonRaceTable: RaceTable | undefined;
-  selectedRace: Race | undefined;
+  seasonRaceTable?: RaceTable;
+  selectedRace?: Race;
   raceInfoTab: RaceInformationTabs;
 };
 

@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 
 //MUI Components
 import Typography from "@mui/material/Typography";
-import { AppBar, Toolbar } from "@mui/material";
+import { AppBar, Hidden, Toolbar, Box } from "@mui/material";
 import { Bolt } from "@mui/icons-material";
 
 // Types
@@ -13,14 +13,22 @@ function App() {
 
   return (
     <>
-      <main style={{ backgroundColor: "secondary.main" }}>
-        <AppBar position="sticky">
+      <main
+        style={{
+          backgroundColor: "secondary.main",
+          height: "100vh",
+          overflow: "scroll",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <AppBar position={"static"}>
           <Toolbar>
             <Bolt />
             <Typography variant="h6">F1 Dash</Typography>
           </Toolbar>
         </AppBar>
-        <section>
+        <section style={{ height: "calc(100vh - 64px)" }}>
           <Suspense fallback={<CarLoader />}>
             <RaceView />
           </Suspense>

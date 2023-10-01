@@ -21,7 +21,13 @@ export const RaceSelectionPanel = () => {
 
   return (
     raceContext && (
-      <Grid container spacing="8px" padding="8px">
+      <Grid
+        container
+        height={"100%"}
+        padding="0px"
+        paddingTop="8px"
+        paddingLeft="8px"
+      >
         <Grid md={10} xs={12} item>
           {selectedRace ? (
             <RaceDisplay {...{ race: selectedRace }} />
@@ -35,7 +41,10 @@ export const RaceSelectionPanel = () => {
           item
           spacing={1}
           overflow={"scroll"}
-          maxHeight={"90vh"}
+          height={"100%"}
+          padding={"0px"}
+          paddingLeft="8px"
+          paddingRight="8px"
         >
           {seasonRaceTable &&
             seasonRaceTable.Races.map((race, i) => (
