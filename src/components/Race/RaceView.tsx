@@ -1,27 +1,43 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 
 import { RaceSelectionPanel } from "./RaceSelectionPanel";
-import { Race, RaceTable } from "../../global";
+import { RaceTable } from "../../global";
 import { RaceInformationTabs, RaceState } from "../../contexts/context.types";
 import { RaceContext } from "../../contexts/ContextProvider";
 
 import { RaceReducer } from "../../contexts/race/raceReducer";
+import { RaceActions } from "../../contexts/race/raceReducer.actions";
 
-interface PropTypes {
-  seasonRaceTable: RaceTable;
-}
-
-export const RaceView = ({ seasonRaceTable }: PropTypes) => {
+const RaceView = () => {
   // const [selectedRace, setSelectedRace] = useState<Race>();
 
   const initialRaceState: RaceState = {
-    seasonRaceTable: seasonRaceTable,
-    selectedRace: seasonRaceTable.Races[
-      seasonRaceTable.Races.length - 1
-    ] as Race,
+    raceLoading: true,
     raceInfoTab: RaceInformationTabs.details,
+    seasonRaceTable: null,
+    selectedRace: null,
   };
+  // const initialRaceState: RaceState = {
+  //   seasonRaceTable: seasonRaceTable,
+  //   selectedRace: seasonRaceTable.Races[
+  //     seasonRaceTable.Races.length - 1
+  //   ] as Race,
+  //   raceInfoTab: RaceInformationTabs.details,
+  // };
   const [raceState, dispatch] = useReducer(RaceReducer, initialRaceState);
+
+  useEffect(() => {
+    fetch("http://ergast.com/api/f1/current.json")
+      .then((res) => res.json())
+      .then((seasonData) => {
+        console.log(seasonData);
+        dispatch({
+          type: RaceActions.SET_SEASON_RACETABLE,
+          payload: seasonData?.["MRData"]?.["RaceTable"] as RaceTable,
+        });
+        // setSeasonRaceTable(seasonData?.["MRData"]?.["RaceTable"]);
+      });
+  }, []);
 
   // setSelectedRace(
   //   seasonData?.["MRData"]?.["RaceTable"].Races[
@@ -35,3 +51,5 @@ export const RaceView = ({ seasonRaceTable }: PropTypes) => {
     </RaceContext.Provider>
   );
 };
+
+export default RaceView;

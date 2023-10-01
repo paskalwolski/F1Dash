@@ -5,8 +5,6 @@ import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceInformationTabs } from "../../contexts/context.types";
 import { RaceActions } from "../../contexts/race/raceReducer.actions";
 
-import { CarLoader } from "../CarLoader/CarLoader";
-
 interface PropTypes {
   race: Race;
 }
@@ -47,13 +45,6 @@ export const RaceDisplay = ({ race }: PropTypes) => {
           }}
           sx={{ pl: 2 }}
         >
-          {/* {Object.values(RaceInformationTabs).map((raceInfo: string) => {
-            // const raceInfoVal = raceInfo as keyof typeof RaceInformation;
-            return (
-              // <Tab label={RaceInformation[raceInfoVal]} value={raceInfoVal} />
-              <Tab label={raceInfo} value={raceInfo} key={raceInfo} />
-            );
-          })} */}
           <Tab
             label={RaceInformationTabs.details}
             value={RaceInformationTabs.details}

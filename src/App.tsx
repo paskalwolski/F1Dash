@@ -1,29 +1,15 @@
-import { useState, useEffect } from "react";
+import { Suspense, lazy } from "react";
 
 //MUI Components
 import Typography from "@mui/material/Typography";
 import { AppBar, Toolbar } from "@mui/material";
 import { Bolt } from "@mui/icons-material";
 
-//Custom Components
-import { RaceView } from "./components/Race/RaceView";
-
 // Types
-import { RaceTable } from "./global";
+import { CarLoader } from "./components/CarLoader/CarLoader";
 
 function App() {
-  const [seasonRaceTable, setSeasonRaceTable] = useState<RaceTable>({
-    season: "",
-    Races: [],
-  });
-
-  useEffect(() => {
-    fetch("http://ergast.com/api/f1/current.json")
-      .then((res) => res.json())
-      .then((seasonData) => {
-        setSeasonRaceTable(seasonData?.["MRData"]?.["RaceTable"]);
-      });
-  }, []);
+  const RaceView = lazy(() => import("./components/Race/RaceView"));
 
   return (
     <>
@@ -35,7 +21,9 @@ function App() {
           </Toolbar>
         </AppBar>
         <section>
-          {seasonRaceTable.season && <RaceView {...{ seasonRaceTable }} />}
+          <Suspense fallback={<CarLoader />}>
+            <RaceView />
+          </Suspense>
           {/* <SeasonPanel /> */}
         </section>
       </main>

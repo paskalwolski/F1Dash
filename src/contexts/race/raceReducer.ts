@@ -1,3 +1,4 @@
+import { Race, RaceTable } from "../../global";
 import { RaceInformationTabs, RaceState } from "../context.types";
 import { RaceActionTypes, RaceActions } from "./raceReducer.actions";
 
@@ -23,7 +24,19 @@ export const RaceReducer = (
         raceInfoTab: action.payload,
       };
     }
+    case RaceActions.SET_SEASON_RACETABLE: {
+      return {
+        ...state,
+        seasonRaceTable: action.payload,
+        selectedRace: selectMostRecentRace(action.payload),
+        raceInfoTab: RaceInformationTabs.details,
+      };
+    }
     default:
       return state;
   }
+};
+
+const selectMostRecentRace = (raceTable: RaceTable): Race => {
+  return raceTable.Races[1];
 };
