@@ -25,16 +25,16 @@ export const RaceSelectionPanel = () =>
   // setSelectedRace,
   // }: props
   {
-    const raceContext: RaceContextTypes = useContext(RaceContext);
+    const raceContext: RaceContextTypes | null = useContext(RaceContext);
 
     const selectedRace = useMemo(
-      () => raceContext.state?.selectedRace,
-      [raceContext.state?.selectedRace]
+      () => raceContext?.state.selectedRace,
+      [raceContext?.state.selectedRace]
     );
 
     const seasonRaceTable = useMemo(
-      () => raceContext.state?.seasonRaceTable,
-      [raceContext.state?.seasonRaceTable]
+      () => raceContext?.state.seasonRaceTable,
+      [raceContext?.state.seasonRaceTable]
     );
 
     return (
@@ -59,9 +59,7 @@ export const RaceSelectionPanel = () =>
               seasonRaceTable.Races.map((race, i) => (
                 <Grid item width={"100%"} key={i}>
                   <RaceCard
-                    // actionAreaClick={() => {
-                    //   setSelectedTab(selectedPanel.race);
-                    // }}
+                    dispatchRaceContext={raceContext?.dispatch}
                     key={i}
                     {...{ race }}
                   />

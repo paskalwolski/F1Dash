@@ -1,27 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Race } from "../../global";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { RaceContext } from "../../contexts/ContextProvider";
+import { RaceInformationTabs } from "../../contexts/context.types";
+import { RaceActions } from "../../contexts/race/raceReducer.actions";
 
 interface PropTypes {
   race: Race;
 }
 
-enum RaceInformation {
-  details = "Details",
-  results = "Results",
-  standings = "Standings",
-}
-
 export const RaceDisplay = ({ race }: PropTypes) => {
-  const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
-    useState<RaceInformation>(RaceInformation.details);
+  // const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
+  //   useState<RaceInformation>(RaceInformation.details);
 
-  useEffect(() => {
-    console.log(raceInfoDisplayFlag);
-  }, [raceInfoDisplayFlag]);
+  const raceCTX = useContext(RaceContext);
 
   return (
-    <Box sx={{ border: 1, borderRadius: 3, p: 2, pl: 4, bgcolor: "primary" }}>
+    <Box
+      sx={{
+        borderWidth: 3,
+        borderStyle: "solid",
+        borderRadius: 3,
+        p: 2,
+        pl: 4,
+        borderColor: "primary.main",
+      }}
+    >
       <Typography variant="h3" sx={{ pb: 1 }}>
         {race.raceName}
       </Typography>
@@ -35,23 +39,38 @@ export const RaceDisplay = ({ race }: PropTypes) => {
       </div>
       <Box>
         <Tabs
-          value={raceInfoDisplayFlag}
-          onChange={(_, v: RaceInformation) => {
-            setRaceInfoDisplayFlag(v);
+          value={raceCTX?.state.raceInfoTab}
+          onChange={(_, v: RaceInformationTabs) => {
+            raceCTX?.dispatch({ type: RaceActions.SET_INFO_TAB, payload: v });
           }}
           sx={{ pl: 2 }}
         >
-          {Object.values(RaceInformation).map((raceInfo: string) => {
+          {/* {Object.values(RaceInformationTabs).map((raceInfo: string) => {
             // const raceInfoVal = raceInfo as keyof typeof RaceInformation;
             return (
               // <Tab label={RaceInformation[raceInfoVal]} value={raceInfoVal} />
               <Tab label={raceInfo} value={raceInfo} key={raceInfo} />
             );
-          })}
+          })} */}
+          <Tab
+            label={RaceInformationTabs.details}
+            value={RaceInformationTabs.details}
+            key={RaceInformationTabs.details}
+          />
+          <Tab
+            label={RaceInformationTabs.results}
+            value={RaceInformationTabs.results}
+            key={RaceInformationTabs.results}
+          />
+          <Tab
+            label={RaceInformationTabs.standings}
+            value={RaceInformationTabs.standings}
+            key={RaceInformationTabs.standings}
+          />
         </Tabs>
         {
           {
-            [RaceInformation.details]: (
+            [RaceInformationTabs.details]: (
               <Box sx={{ ml: 2 }}>
                 <Typography variant="body1">
                   Qualifying: {race.Qualifying.time}
@@ -69,9 +88,9 @@ export const RaceDisplay = ({ race }: PropTypes) => {
                 )}
               </Box>
             ),
-            [RaceInformation.results]: <>Results go here!</>,
-            [RaceInformation.standings]: <>Season goes here!</>,
-          }[raceInfoDisplayFlag]
+            [RaceInformationTabs.results]: <>Results go here!</>,
+            [RaceInformationTabs.standings]: <>Season goes here!</>,
+          }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]
         }
       </Box>
     </Box>

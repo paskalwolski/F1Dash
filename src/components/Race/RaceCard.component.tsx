@@ -1,3 +1,4 @@
+import React from "react";
 import { Race } from "../../global";
 import {
   Card,
@@ -8,23 +9,31 @@ import {
   CardActionArea,
 } from "@mui/material";
 
+import {
+  RaceActionTypes,
+  RaceActions,
+} from "../../contexts/race/raceReducer.actions";
+import { RaceInformationTabs } from "../../contexts/context.types";
+
 interface propTypes {
   race: Race;
   // selectRace: React.Dispatch<React.SetStateAction<Race | undefined>>;
   displayOnly?: boolean;
-  actionAreaClick?: CallableFunction;
-  resultButtonClickAction?: CallableFunction;
-  standingsButtonClickAction?: CallableFunction;
+  dispatchRaceContext: React.Dispatch<RaceActionTypes>;
+  // actionAreaClick?: CallableFunction;
+  // resultButtonClickAction?: CallableFunction;
+  // standingsButtonClickAction?: CallableFunction;
 }
 
 export const RaceCard = ({
   race,
   // selectRace,
   displayOnly,
-  actionAreaClick,
-  resultButtonClickAction,
-  standingsButtonClickAction,
-}: propTypes) => {
+  dispatchRaceContext,
+}: // actionAreaClick,
+// resultButtonClickAction,
+// standingsButtonClickAction,
+propTypes) => {
   return (
     <Card
       sx={{
@@ -40,9 +49,10 @@ export const RaceCard = ({
           displayOnly
             ? undefined
             : () => {
-                actionAreaClick && actionAreaClick();
-                console.log("Selecting " + race.raceName);
-                // selectRace(race);
+                dispatchRaceContext({
+                  type: RaceActions.SET_RACE,
+                  payload: { race },
+                });
               }
         }
       >
@@ -54,20 +64,36 @@ export const RaceCard = ({
       </CardActionArea>
       {!displayOnly && (
         <CardActions>
-          {resultButtonClickAction && (
-            <Button size="small" color="primary">
-              Results
-            </Button>
-          )}
-          {standingsButtonClickAction && (
-            <Button
-              size="small"
-              color="primary"
-              onClick={standingsButtonClickAction()}
-            >
-              Standings
-            </Button>
-          )}
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              dispatchRaceContext({
+                type: RaceActions.SET_RACE,
+                payload: {
+                  race,
+                  infoTab: RaceInformationTabs.results,
+                },
+              });
+            }}
+          >
+            Results
+          </Button>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              dispatchRaceContext({
+                type: RaceActions.SET_RACE,
+                payload: {
+                  race,
+                  infoTab: RaceInformationTabs.standings,
+                },
+              });
+            }}
+          >
+            Standings
+          </Button>
         </CardActions>
       )}
     </Card>

@@ -13,11 +13,12 @@ Each view has it's own context (provided by the useContext hook) and a reducer t
 ### Context Providers
 
 Currently, there is only a Race view - however, this could be expanded, allowing the user to view more than just a single race/season at a time. When that happens, it will be necessary to have different contexts for the views - which all come from a single context provider file.
-It was a big battle to allow for null state in the context, but also be as confident as possible in a context holding some meaningful state. The compromise was to say that the context type is always a meaningful state, with some optional but critical properties. 
+It was a big battle to allow for null state in the context, but also be as confident as possible in a context holding some meaningful state. For now, the Race context can be totally meaningless (on initial creation) but as soon as it starts to be used, it is populated with meaningful values. This does mean that wherever the context is used, it must be null-checked. 
 
 ### Reducers
 
 Although there is as yet no root reducer, there is a reducer to handel the state of the Race View. This is made available through the above-mentioned context providers. Through this, a single context can be exposed containing both the get and set methods for that context's state - the dispatch for the reducer is also exposed, and so it can be easily changed from anywhere.
+
 
 ## Component Library
 
