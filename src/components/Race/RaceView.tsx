@@ -29,7 +29,6 @@ const RaceView = ({ seasonUrl }: Props) => {
     fetch(targetUrl)
       .then((res) => res.json())
       .then((seasonData) => {
-        console.log(seasonData);
         dispatch({
           type: RaceActions.SET_SEASON_RACETABLE,
           payload: seasonData?.["MRData"]?.["RaceTable"] as RaceTable,

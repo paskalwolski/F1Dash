@@ -1,5 +1,5 @@
 // import { Typography } from "@mui/material";
-import { useContext, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Grid } from "@mui/material";
 import { RaceCard } from "./RaceCard.component";
 import { RaceDisplay } from "./RaceDisplay.component";
@@ -10,6 +10,7 @@ import { CarLoader } from "../CarLoader/CarLoader";
 export const RaceSelectionPanel = () => {
   const raceContext: RaceContextTypes | null = useContext(RaceContext);
 
+
   const selectedRace = useMemo(
     () => raceContext?.state.selectedRace,
     [raceContext?.state.selectedRace]
@@ -19,6 +20,8 @@ export const RaceSelectionPanel = () => {
     () => raceContext?.state.seasonRaceTable,
     [raceContext?.state.seasonRaceTable]
   );
+
+  const PureRaceDisplay = React.memo(RaceDisplay);
 
   return raceContext?.state.raceTableLoading ? (
     <CarLoader />
@@ -33,7 +36,7 @@ export const RaceSelectionPanel = () => {
       >
         <Grid md={10} xs={12} item>
           {selectedRace ? (
-            <RaceDisplay {...{ race: selectedRace }} />
+            <PureRaceDisplay {...{ race: selectedRace }} />
           ) : (
             <div>Please select a race</div>
           )}

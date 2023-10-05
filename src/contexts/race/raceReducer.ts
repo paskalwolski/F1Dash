@@ -6,18 +6,17 @@ export const RaceReducer = (
   state: RaceState,
   action: RaceActionTypes
 ): RaceState => {
+  console.log(action.type);
   switch (action.type) {
-    case RaceActions.SET_RACE:
-      {
-        return {
-          ...state,
-          selectedRace: action.payload.race,
-          raceInfoTab: action.payload.infoTab
-            ? action.payload.infoTab
-            : RaceInformationTabs.details,
-        };
-      }
-      break;
+    case RaceActions.SET_RACE: {
+      return {
+        ...state,
+        selectedRace: action.payload.race,
+        raceInfoTab: action.payload.infoTab
+          ? action.payload.infoTab
+          : RaceInformationTabs.details,
+      };
+    }
     case RaceActions.SET_INFO_TAB: {
       return {
         ...state,
@@ -45,5 +44,5 @@ export const RaceReducer = (
 };
 
 const selectMostRecentRace = (raceTable: RaceTable): Race => {
-  return raceTable.Races[1];
+  return raceTable.Races[0];
 };

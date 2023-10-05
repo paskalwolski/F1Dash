@@ -25,84 +25,87 @@ interface propTypes {
   // standingsButtonClickAction?: CallableFunction;
 }
 
-export const RaceCard = ({
-  race,
-  // selectRace,
-  displayOnly,
-  dispatchRaceContext,
-}: // actionAreaClick,
-// resultButtonClickAction,
-// standingsButtonClickAction,
-propTypes) => {
-  const shortenRaceName = (raceName: string): string => {
-    const splitName = raceName.split(" ").slice(0, -2);
-    splitName.push("GP");
-    const abbr = splitName.join(" ");
-    return abbr;
-  };
+export const RaceCard = React.memo(
+  ({
+    race,
+    // selectRace,
+    displayOnly,
+    dispatchRaceContext,
+  }: // actionAreaClick,
+  // resultButtonClickAction,
+  // standingsButtonClickAction,
+  propTypes) => {
+    const shortenRaceName = (raceName: string): string => {
+      const splitName = raceName.split(" ").slice(0, -2);
+      splitName.push("GP");
+      return splitName.join(" ");
+    };
 
-  return (
-    <Card
-      sx={{
-        borderStyle: "solid",
-        borderWidth: "3px",
-        borderColor: "primary.main",
-        borderRadius: "5px",
-        // backgroundColor: "info.dark",
-      }}
-    >
-      <CardActionArea
-        onClick={
-          displayOnly
-            ? undefined
-            : () => {
+    return (
+      <Card
+        sx={{
+          borderStyle: "solid",
+          borderWidth: "3px",
+          borderColor: "primary.main",
+          borderRadius: "5px",
+          // backgroundColor: "info.dark",
+        }}
+      >
+        <CardActionArea
+          onClick={
+            displayOnly
+              ? undefined
+              : () => {
+                  dispatchRaceContext({
+                    type: RaceActions.SET_RACE,
+                    payload: { race },
+                  });
+                }
+          }
+        >
+          <CardContent>
+            <Typography variant="h6">
+              {shortenRaceName(race.raceName)}
+            </Typography>
+            <Typography>Round {race.round}</Typography>
+            {/* <Typography sx={{ fontWeight: "10" }}>{race.date}</Typography> */}
+          </CardContent>
+        </CardActionArea>
+        {!displayOnly && (
+          <CardActions>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => {
                 dispatchRaceContext({
                   type: RaceActions.SET_RACE,
-                  payload: { race },
+                  payload: {
+                    race,
+                    infoTab: RaceInformationTabs.results,
+                  },
                 });
-              }
-        }
-      >
-        <CardContent>
-          <Typography variant="h6">{shortenRaceName(race.raceName)}</Typography>
-          <Typography>Round {race.round}</Typography>
-          {/* <Typography sx={{ fontWeight: "10" }}>{race.date}</Typography> */}
-        </CardContent>
-      </CardActionArea>
-      {!displayOnly && (
-        <CardActions>
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => {
-              dispatchRaceContext({
-                type: RaceActions.SET_RACE,
-                payload: {
-                  race,
-                  infoTab: RaceInformationTabs.results,
-                },
-              });
-            }}
-          >
-            Results
-          </Button>
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => {
-              dispatchRaceContext({
-                type: RaceActions.SET_RACE,
-                payload: {
-                  race,
-                  infoTab: RaceInformationTabs.standings,
-                },
-              });
-            }}
-          >
-            Standings
-          </Button>
-        </CardActions>
-      )}
-    </Card>
-  );
-};
+              }}
+            >
+              Results
+            </Button>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => {
+                dispatchRaceContext({
+                  type: RaceActions.SET_RACE,
+                  payload: {
+                    race,
+                    infoTab: RaceInformationTabs.standings,
+                  },
+                });
+              }}
+            >
+              Standings
+            </Button>
+          </CardActions>
+        )}
+      </Card>
+    );
+  }
+);

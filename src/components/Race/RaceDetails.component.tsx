@@ -1,27 +1,31 @@
-import { useContext } from "react";
-import { RaceContext } from "../../contexts/ContextProvider";
+// import { useContext } from "react";
+// import { RaceContext } from "../../contexts/ContextProvider";
 import { Box, Typography } from "@mui/material";
+import { Race } from "../../global";
 
-export const RaceDetails = () => {
-  const RaceCTX = useContext(RaceContext);
+type Props = {
+  race: Race;
+};
 
-  const selectedRace = RaceCTX?.state.selectedRace;
+export const RaceDetails = ({ race }: Props) => {
+  // const RaceCTX = useContext(RaceContext);
+  // const race = RaceCTX?.state.race;
 
   return (
-    selectedRace && (
+    race && (
       <Box>
         <Typography variant="body1">
-          Qualifying: {selectedRace.Qualifying.time}
+          Qualifying: {race.Qualifying.time}
         </Typography>
         <Typography variant="body2">
-          First Practice: {selectedRace.FirstPractice.time}
+          First Practice: {race.FirstPractice.time}
         </Typography>
         <Typography variant="body2">
-          Second Practice: {selectedRace.SecondPractice.time}
+          Second Practice: {race.SecondPractice.time}
         </Typography>
-        {selectedRace.ThirdPractice && (
+        {race.ThirdPractice && (
           <Typography variant="body2">
-            Third Practice: {selectedRace.ThirdPractice.time}
+            Third Practice: {race.ThirdPractice.time}
           </Typography>
         )}
       </Box>
