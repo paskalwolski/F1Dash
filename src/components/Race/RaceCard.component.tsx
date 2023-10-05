@@ -34,6 +34,13 @@ export const RaceCard = ({
 // resultButtonClickAction,
 // standingsButtonClickAction,
 propTypes) => {
+  const shortenRaceName = (raceName: string): string => {
+    const splitName = raceName.split(" ").slice(0, -2);
+    splitName.push("GP");
+    const abbr = splitName.join(" ");
+    return abbr;
+  };
+
   return (
     <Card
       sx={{
@@ -57,7 +64,7 @@ propTypes) => {
         }
       >
         <CardContent>
-          <Typography variant="h6">{race.raceName}</Typography>
+          <Typography variant="h6">{shortenRaceName(race.raceName)}</Typography>
           <Typography>Round {race.round}</Typography>
           {/* <Typography sx={{ fontWeight: "10" }}>{race.date}</Typography> */}
         </CardContent>
