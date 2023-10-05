@@ -5,6 +5,7 @@ import { RaceCard } from "./RaceCard.component";
 import { RaceDisplay } from "./RaceDisplay.component";
 import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceContextTypes } from "../../contexts/context.types";
+import { CarLoader } from "../CarLoader/CarLoader";
 
 export const RaceSelectionPanel = () => {
   const raceContext: RaceContextTypes | null = useContext(RaceContext);
@@ -19,7 +20,9 @@ export const RaceSelectionPanel = () => {
     [raceContext?.state.seasonRaceTable]
   );
 
-  return (
+  return raceContext?.state.raceTableLoading ? (
+    <CarLoader />
+  ) : (
     raceContext && (
       <Grid
         container

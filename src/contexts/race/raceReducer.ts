@@ -30,6 +30,13 @@ export const RaceReducer = (
         seasonRaceTable: action.payload,
         selectedRace: selectMostRecentRace(action.payload),
         raceInfoTab: RaceInformationTabs.details,
+        raceTableLoading: false,
+      };
+    }
+    case RaceActions.SET_RACETABLE_LOADING: {
+      return {
+        ...state,
+        raceTableLoading: true,
       };
     }
     default:

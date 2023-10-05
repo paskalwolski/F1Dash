@@ -1,15 +1,16 @@
-import { Suspense, lazy } from "react";
+// import { Suspense, lazy } from "react";
 
 //MUI Components
 import Typography from "@mui/material/Typography";
 import { AppBar, Toolbar } from "@mui/material";
 import { Bolt } from "@mui/icons-material";
 
-// Types
-import { CarLoader } from "./components/CarLoader/CarLoader";
+//Custom Components
+// import { CarLoader } from "./components/CarLoader/CarLoader";
+import RaceView from "./components/Race/RaceView";
 
 function App() {
-  const RaceView = lazy(() => import("./components/Race/RaceView"));
+  // const RaceView = lazy(() => import("./components/Race/RaceView"));
 
   return (
     <>
@@ -29,9 +30,9 @@ function App() {
           </Toolbar>
         </AppBar>
         <section style={{ height: "calc(100vh - 64px)" }}>
-          <Suspense fallback={<CarLoader />}>
-            <RaceView />
-          </Suspense>
+          {/* <Suspense fallback={<CarLoader />}> */}
+          <RaceView />
+          {/* </Suspense> */}
           {/* <SeasonPanel /> */}
         </section>
       </main>

@@ -13,7 +13,7 @@
   /* animation: transform 500ms ease-in-out; */
   /* background-color: red; */
   /* transform: enter-animate; */
-  animation: enter-animate 1s ease-in-out;
+  animation: enter-animate 100ms ease-in-out;
 }
 
 .attribution {

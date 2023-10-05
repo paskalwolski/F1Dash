@@ -4,6 +4,7 @@ import { RaceActionTypes } from "./race/raceReducer.actions.js";
 
 export type RaceState = {
   seasonRaceTable?: RaceTable;
+  raceTableLoading: boolean;
   selectedRace?: Race;
   raceInfoTab: RaceInformationTabs;
 };

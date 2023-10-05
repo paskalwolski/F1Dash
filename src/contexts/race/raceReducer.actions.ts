@@ -5,6 +5,7 @@ export enum RaceActions {
   SET_RACE = "set_race",
   SET_INFO_TAB = "set_info_tab",
   SET_SEASON_RACETABLE = "set_season_racetable",
+  SET_RACETABLE_LOADING = "set_racetable_loading",
 }
 
 type SetRaceType = {
@@ -22,7 +23,13 @@ type SetSeasonRacetableType = {
   payload: RaceTable;
 };
 
+type SetRaceTableLoading = {
+  type: RaceActions.SET_RACETABLE_LOADING;
+  payload: boolean | null;
+};
+
 export type RaceActionTypes =
   | SetRaceType
   | SetInfoTabType
-  | SetSeasonRacetableType;
+  | SetSeasonRacetableType
+  | SetRaceTableLoading;
