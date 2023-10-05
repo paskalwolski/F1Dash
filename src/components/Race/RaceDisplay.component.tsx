@@ -1,10 +1,14 @@
-import { useContext } from "react";
+import { useContext, useMemo, useEffect, useState } from "react";
 import { Race } from "../../global";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceInformationTabs } from "../../contexts/context.types";
 import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails.component";
+import { CarLoader } from "../CarLoader/CarLoader";
+
+import { Result } from "../../global";
+import RaceResultsPanel from "./RaceResultsPanel.component";
 
 interface PropTypes {
   race: Race;
@@ -13,8 +17,33 @@ interface PropTypes {
 export const RaceDisplay = ({ race }: PropTypes) => {
   // const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
   //   useState<RaceInformation>(RaceInformation.details);
+  const [results, setResults] = useState<Result[] | null>(null);
+  const [loadingResults, setLoadingResults] = useState<boolean>(true);
 
   const raceCTX = useContext(RaceContext);
+
+  const selectedRace = useMemo(
+    () => raceCTX?.state.selectedRace,
+    [raceCTX?.state.selectedRace]
+  );
+
+  const selectedRound = selectedRace?.round ?? "last";
+  const selectedSeason = selectedRace?.season ?? "current";
+
+  useEffect(() => {
+    const url = `http://ergast.com/api/f1/${selectedSeason}/${selectedRound}/results.json`;
+    fetch(url)
+      .then((data) => data.json())
+      .then((res) => {
+        console.log(res.MRData.RaceTable.Races[0].Results);
+        setResults(res.MRData.RaceTable.Races[0].Results);
+        setLoadingResults(false);
+      });
+  }, [selectedRound, selectedSeason]);
+
+  useEffect(() => {
+    console.count("LR: " + loadingResults);
+  }, [loadingResults]);
 
   return (
     <Box
@@ -65,8 +94,12 @@ export const RaceDisplay = ({ race }: PropTypes) => {
         <Box sx={{ padding: "8px" }}>
           {
             {
-              [RaceInformationTabs.details]: <RaceDetails />,
-              [RaceInformationTabs.results]: <>Results go here!</>,
+              [RaceInformationTabs.details]: <RaceDetails {...{ race }} />,
+              [RaceInformationTabs.results]: loadingResults ? (
+                <CarLoader />
+              ) : (
+                results && <RaceResultsPanel {...{ results }} />
+              ),
               [RaceInformationTabs.standings]: <>Season goes here!</>,
             }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]
           }
