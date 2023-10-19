@@ -6,7 +6,6 @@ export const RaceReducer = (
   state: RaceState,
   action: RaceActionTypes
 ): RaceState => {
-  console.log(action.type);
   switch (action.type) {
     case RaceActions.SET_RACE: {
       return {

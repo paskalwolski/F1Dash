@@ -1,5 +1,4 @@
 import { useContext, useMemo, useEffect, useState } from "react";
-import { Race } from "../../global";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceInformationTabs } from "../../contexts/context.types";
@@ -7,12 +6,12 @@ import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
-import { Result } from "../../global";
+import { Race, Result } from "../../global";
 import RaceResultsPanel from "./RaceResultsPanel.component";
 
-interface PropTypes {
+type PropTypes = {
   race: Race;
-}
+};
 
 export const RaceDisplay = ({ race }: PropTypes) => {
   // const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
@@ -22,28 +21,21 @@ export const RaceDisplay = ({ race }: PropTypes) => {
 
   const raceCTX = useContext(RaceContext);
 
-  const selectedRace = useMemo(
-    () => raceCTX?.state.selectedRace,
-    [raceCTX?.state.selectedRace]
-  );
-
-  const selectedRound = selectedRace?.round ?? "last";
-  const selectedSeason = selectedRace?.season ?? "current";
+  const raceId = useMemo(() => {
+    return race.season + "r" + race.round;
+  }, [race.round, race.season]);
 
   useEffect(() => {
+    const selectedSeason = race.season;
+    const selectedRound = race.round;
     const url = `http://ergast.com/api/f1/${selectedSeason}/${selectedRound}/results.json`;
     fetch(url)
       .then((data) => data.json())
       .then((res) => {
-        console.log(res.MRData.RaceTable.Races[0].Results);
         setResults(res.MRData.RaceTable.Races[0].Results);
         setLoadingResults(false);
       });
-  }, [selectedRound, selectedSeason]);
-
-  useEffect(() => {
-    console.count("LR: " + loadingResults);
-  }, [loadingResults]);
+  }, [raceId]);
 
   return (
     <Box

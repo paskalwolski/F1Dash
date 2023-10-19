@@ -9,10 +9,10 @@ import { RaceInformationTabs } from "../context.types";
 //   SET_RACE_RESULT,
 // }
 export enum RaceActions {
-  SET_RACE,
-  SET_INFO_TAB,
-  SET_SEASON_RACETABLE,
-  SET_RACETABLE_LOADING,
+  SET_RACE = "SET_RACE",
+  SET_INFO_TAB = "SET_INFO_TAB",
+  SET_SEASON_RACETABLE = "SET_SEASON_RACETABLE",
+  SET_RACETABLE_LOADING = "SET_RACETABLE_LOADING",
 }
 
 type SetRaceType = {
