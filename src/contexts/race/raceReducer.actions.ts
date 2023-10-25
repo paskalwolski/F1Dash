@@ -1,4 +1,4 @@
-import { Race, RaceTable } from "../../global";
+import { Race, RaceTable } from "../../types/global";
 import { RaceInformationTabs } from "../context.types";
 
 // export enum RaceActions {

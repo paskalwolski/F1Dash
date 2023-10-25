@@ -1,7 +1,7 @@
 // import { useContext } from "react";
 // import { RaceContext } from "../../contexts/ContextProvider";
 import { Box, Typography } from "@mui/material";
-import { Race } from "../../global";
+import { Race } from "../../types/global";
 
 type Props = {
   race: Race;

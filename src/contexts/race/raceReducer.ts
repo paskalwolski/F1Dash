@@ -1,4 +1,4 @@
-import { Race, RaceTable } from "../../global";
+import { Race, RaceTable } from "../../types/global";
 import { RaceInformationTabs, RaceState } from "../context.types";
 import { RaceActionTypes, RaceActions } from "./raceReducer.actions";
 

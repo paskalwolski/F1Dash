@@ -6,7 +6,7 @@ import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
-import { Race, Result } from "../../global";
+import { Race, Result } from "../../types/global";
 import RaceResultsPanel from "./RaceResultsPanel.component";
 
 type PropTypes = {
@@ -17,6 +17,7 @@ export const RaceDisplay = ({ race }: PropTypes) => {
   // const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
   //   useState<RaceInformation>(RaceInformation.details);
   const [results, setResults] = useState<Result[] | null>(null);
+  // const [standings, setStandings] = useState<Standing[] | null>(null);
   const [loadingResults, setLoadingResults] = useState<boolean>(true);
 
   const raceCTX = useContext(RaceContext);
@@ -90,7 +91,14 @@ export const RaceDisplay = ({ race }: PropTypes) => {
               [RaceInformationTabs.results]: loadingResults ? (
                 <CarLoader />
               ) : (
-                results && <RaceResultsPanel {...{ results }} />
+                results && (
+                  <RaceResultsPanel
+                    {...{
+                      results,
+                      resultId: "s" + race.season + "r" + race.round,
+                    }}
+                  />
+                )
               ),
               [RaceInformationTabs.standings]: <>Season goes here!</>,
             }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]

@@ -1,7 +1,7 @@
 import { useReducer, useEffect } from "react";
 
 import { RaceSelectionPanel } from "./RaceSelectionPanel";
-import { RaceTable } from "../../global";
+import { RaceTable } from "../../types/global";
 import { RaceInformationTabs, RaceState } from "../../contexts/context.types";
 import { RaceContext } from "../../contexts/ContextProvider";
 

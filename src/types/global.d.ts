@@ -46,10 +46,6 @@ export type Result = {
   grid: string;
   laps: string;
   status: string;
-  Time: {
-    millis: string;
-    time: string;
-  };
   FastestLap: {
     rank: string;
     lap: string;
@@ -74,7 +70,30 @@ export type Driver = {
   nationality: string;
 };
 
+export type Constructor = {
+  constructorId: string;
+  url: string;
+  nationality: string;
+  name: string;
+};
+
 export type Session = {
   date: string;
   time: string;
+};
+
+export type ResultsTableData = {
+  number: number;
+  position: number;
+  points: number;
+  Driver: string;
+  Constructor: string;
+  grid: number;
+  laps: number;
+  status: string;
+  isFastestLap: boolean;
+  fastestLapRank: number;
+  fastestLapNumber: number;
+  fastestLapTime: string;
+  AverageSpeed: number;
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Race } from "../../global";
+import { Race } from "../../types/global";
 import {
   Card,
   CardContent,
