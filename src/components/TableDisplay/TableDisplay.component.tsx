@@ -1,32 +1,40 @@
-import { useState } from "react";
-import { RaceResultTableData } from "../../types/TableData";
+import { useMemo, useState } from "react";
+import { TableData } from "../../types/TableData";
 
-type Props = {
-  keys: string[];
-  data: RaceResultTableData[];
+type Props<T extends TableData> = {
+  data: T[];
+  resultId: string;
 };
-export const TableDisplay = ({ keys, data }: Props) => {
-  const [visibleData, setVisibleData] = useState<string[]>(keys);
+export const TableDisplay = <T extends TableData>({
+  data,
+  resultId,
+}: Props<T>) => {
+  const keys: (keyof T)[] = useMemo(() => {
+    const egKeys = Object.keys(data[0]);
+    const finalKeys = egKeys as (keyof T)[];
+    return finalKeys;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resultId]);
+
+  const [visibleData, setVisibleData] = useState<(keyof T)[]>(keys);
 
   return (
     <table>
       <thead>
         <tr>
-          {keys.map((k) => (
-            <th key={"k" + k}>{k.toUpperCase()}</th>
+          {keys.map((k, i) => (
+            <th key={"k" + i}>{k.toString().toUpperCase()}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((res) => {
+        {data.map((entry: T, i) => {
           return (
-            <tr key={"p" + res.position}>
-              {keys.map((cell) => {
-                const resultKey = cell as keyof RaceResultTableData;
+            <tr key={"r" + i}>
+              {keys.map((cell, j) => {
+                const resultKey = cell as keyof T;
                 return (
-                  <td key={"p" + res.position + "d" + cell}>
-                    {res[resultKey]}
-                  </td>
+                  <td key={"r" + i + "c" + j}>{entry[resultKey] as string}</td>
                 );
               })}
             </tr>

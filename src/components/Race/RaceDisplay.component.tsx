@@ -49,9 +49,9 @@ export const RaceDisplay = ({ race }: PropTypes) => {
     }
   }, [raceCTX?.state.raceInfoTab]);
 
-  useEffect(() => {
-    console.log(raceData);
-  }, [raceData]);
+  // useEffect(() => {
+  //   console.log(raceData);
+  // }, [raceData]);
 
   const getRaceData = (key: keyof RaceDataTypes) => {
     if (key in raceData) {
@@ -81,7 +81,6 @@ export const RaceDisplay = ({ race }: PropTypes) => {
               results = data.MRData.RaceTable.Races[0].Results as RaceResult[];
               break;
           }
-          console.log(key + ": " + results);
           setRaceData({ ...raceData, [key]: results });
           setLoadingData(false);
         })

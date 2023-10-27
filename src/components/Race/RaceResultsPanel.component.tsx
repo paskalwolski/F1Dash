@@ -45,9 +45,7 @@ const RaceResultsPanel = ({ results, resultId }: Props) => {
   return (
     <Box sx={{ overflowX: "auto" }}>
       {tableData ? (
-        <TableDisplay
-          {...{ keys: Object.keys(tableData[0]) ?? [], data: tableData }}
-        />
+        <TableDisplay<RaceResultTableData> {...{ data: tableData, resultId }} />
       ) : (
         <>There was an error loading your table data</>
       )}
