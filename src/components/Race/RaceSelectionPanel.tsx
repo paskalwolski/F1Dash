@@ -1,5 +1,5 @@
 // import { Typography } from "@mui/material";
-import React, { useContext, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Grid } from "@mui/material";
 import { RaceCard } from "./RaceCard.component";
 import { RaceDisplay } from "./RaceDisplay.component";
@@ -12,11 +12,13 @@ export const RaceSelectionPanel = () => {
 
   const selectedRace = useMemo(
     () => raceContext?.state.selectedRace,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [raceContext?.state.selectedRace?.raceName]
   );
 
   const seasonRaceTable = useMemo(
     () => raceContext?.state.seasonRaceTable,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [raceContext?.state.seasonRaceTable?.season]
   );
 
@@ -31,7 +33,7 @@ export const RaceSelectionPanel = () => {
         paddingTop="8px"
         paddingLeft="8px"
       >
-        <Grid md={10} xs={12} item>
+        <Grid md={10} xs={12} item maxHeight="95%">
           {selectedRace ? (
             <RaceDisplay {...{ race: selectedRace }} />
           ) : (

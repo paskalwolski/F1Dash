@@ -2,7 +2,6 @@ export type Season = {
   season: string;
   url: string;
   Races: Race[];
-  season?: string;
 };
 
 export type Race = {
@@ -11,6 +10,7 @@ export type Race = {
   FirstPractice: Session;
   SecondPractice: Session;
   ThirdPractice?: Session;
+  Sprint?: Session;
   raceName: string;
   round: string;
   season: string;
@@ -36,7 +36,7 @@ export type Circuit = {
   };
 };
 
-export type Result = {
+export type RaceResult = {
   number: string;
   position: string;
   positionText: string;
@@ -82,18 +82,29 @@ export type Session = {
   time: string;
 };
 
-export type ResultsTableData = {
-  number: number;
-  position: number;
-  points: number;
-  Driver: string;
-  Constructor: string;
-  grid: number;
-  laps: number;
-  status: string;
-  isFastestLap: boolean;
-  fastestLapRank: number;
-  fastestLapNumber: number;
-  fastestLapTime: string;
-  AverageSpeed: number;
+type Standing = {
+  position: string;
+  positionText: string;
+  points: string;
+  wins: string;
 };
+
+export type DriverStanding = Standing & {
+  Driver: Driver;
+  Constructors: Constructor[];
+};
+export type ConstructorStanding = Standing & {
+  Constructor: Constructor;
+};
+
+export type QualifyingResult = {};
+
+export type ResultTypes = {
+  Results?: RaceResult[];
+  Qualifying?: QualifyingResult[];
+  Sprint?: SprintResult[];
+  ConstructorStandings?: ConstructorStanding[];
+  DriverStandings?: DriverStanding[];
+};
+
+export type RaceDataTypes = ResultTypes & { Details: Race };

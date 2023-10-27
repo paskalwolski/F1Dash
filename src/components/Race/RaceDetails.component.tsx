@@ -4,6 +4,15 @@ import { Box, Typography } from "@mui/material";
 import { Race } from "../../types/global";
 
 type Props = {
+  // raceDetails: {
+  //   date: string;
+  //   time: string;
+  //   Qualifying: Session;
+  //   FirstPractice: Session;
+  //   SecondPractice: Session;
+  //   ThirdPractice?: Session;
+  //   Sprint?: Session;
+  // };
   race: Race;
 };
 
@@ -12,23 +21,29 @@ export const RaceDetails = ({ race }: Props) => {
   // const race = RaceCTX?.state.race;
 
   return (
-    race && (
-      <Box>
-        <Typography variant="body1">
-          Qualifying: {race.Qualifying.time}
-        </Typography>
+    <Box>
+      <Typography variant="body1">
+        Race: {race.date + " at " + race.time}
+      </Typography>
+      <Typography variant="body1">
+        Qualifying: {race.Qualifying.time}
+      </Typography>
+      <Typography variant="body2">
+        First Practice: {race.FirstPractice.time}
+      </Typography>
+      <Typography variant="body2">
+        {"Sprint" in race ? "Sprint Qualifying" : "Second Practice"}
+        {": "}
+        {race.SecondPractice.time}
+      </Typography>
+      {race.ThirdPractice && (
         <Typography variant="body2">
-          First Practice: {race.FirstPractice.time}
+          Third Practice: {race.ThirdPractice.time}
         </Typography>
-        <Typography variant="body2">
-          Second Practice: {race.SecondPractice.time}
-        </Typography>
-        {race.ThirdPractice && (
-          <Typography variant="body2">
-            Third Practice: {race.ThirdPractice.time}
-          </Typography>
-        )}
-      </Box>
-    )
+      )}
+      {race.Sprint && (
+        <Typography variant="body2">Sprint: {race.Sprint.time}</Typography>
+      )}
+    </Box>
   );
 };

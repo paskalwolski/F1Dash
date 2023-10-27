@@ -1,4 +1,4 @@
-import { useContext, useMemo, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceInformationTabs } from "../../contexts/context.types";
@@ -6,7 +6,7 @@ import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
-import { Race, Result } from "../../types/global";
+import { Race, RaceDataTypes, RaceResult } from "../../types/global";
 import RaceResultsPanel from "./RaceResultsPanel.component";
 
 type PropTypes = {
@@ -14,11 +14,8 @@ type PropTypes = {
 };
 
 export const RaceDisplay = ({ race }: PropTypes) => {
-  // const [raceInfoDisplayFlag, setRaceInfoDisplayFlag] =
-  //   useState<RaceInformation>(RaceInformation.details);
-  const [results, setResults] = useState<Result[] | null>(null);
-  // const [standings, setStandings] = useState<Standing[] | null>(null);
-  const [loadingResults, setLoadingResults] = useState<boolean>(true);
+  const [raceData, setRaceData] = useState<RaceDataTypes>({ Details: race });
+  const [loadingData, setLoadingData] = useState<boolean>(true);
 
   const raceCTX = useContext(RaceContext);
 
@@ -26,17 +23,46 @@ export const RaceDisplay = ({ race }: PropTypes) => {
     return race.season + "r" + race.round;
   }, [race.round, race.season]);
 
-  useEffect(() => {
-    const selectedSeason = race.season;
-    const selectedRound = race.round;
-    const url = `http://ergast.com/api/f1/${selectedSeason}/${selectedRound}/results.json`;
-    fetch(url)
-      .then((data) => data.json())
-      .then((res) => {
-        setResults(res.MRData.RaceTable.Races[0].Results);
-        setLoadingResults(false);
-      });
-  }, [raceId]);
+  // useEffect(() => {
+  //   const selectedSeason = race.season;
+  //   const selectedRound = race.round;
+  //   const url = `http://ergast.com/api/f1/${selectedSeason}/${selectedRound}/results.json`;
+  //   fetch(url)
+  //     .then((data) => data.json())
+  //     .then((res) => {
+  //       setRaceData({ Details: res.MRData.RaceTable.Races[0].Results as Race });
+  //       setLoadingData(false);
+  //     });
+  // }, [raceId]);
+
+  const getRaceData = <T,>(key: keyof RaceDataTypes) => {
+    if (key in raceData) {
+      console.log("Using stored data...");
+      return raceData[key] as T;
+    } else {
+      console.log("Fetching new data...");
+      setLoadingData(true);
+      fetch(`http://ergast.com/api/f1/${race.season}/${race.round}/${key}.json`)
+        .then((res) => res.json())
+        .then((data) => {
+          let results;
+          switch (key) {
+            case "DriverStandings":
+              results = data.MRData.StandingsLists[0].DriverStandings as T;
+              break;
+            case "ConstructorStandings":
+              results = data.MRData.StandingsLists[0].ConstructorStandings as T;
+              break;
+          }
+          setRaceData({ ...data, [key]: results });
+          setLoadingData(false);
+          return results;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
 
   return (
     <Box
@@ -47,6 +73,8 @@ export const RaceDisplay = ({ race }: PropTypes) => {
         p: 2,
         pl: 4,
         borderColor: "primary.main",
+        height: "100%",
+        overflow: "scroll",
       }}
     >
       <Typography variant="h3" sx={{ pb: 1 }}>
@@ -85,24 +113,29 @@ export const RaceDisplay = ({ race }: PropTypes) => {
           />
         </Tabs>
         <Box sx={{ padding: "8px" }}>
-          {
+          {loadingData ? (
+            <CarLoader />
+          ) : (
             {
-              [RaceInformationTabs.details]: <RaceDetails {...{ race }} />,
-              [RaceInformationTabs.results]: loadingResults ? (
-                <CarLoader />
+              [RaceInformationTabs.details]: raceData.Details ? (
+                <RaceDetails {...{ race: raceData.Details }} />
               ) : (
-                results && (
-                  <RaceResultsPanel
-                    {...{
-                      results,
-                      resultId: "s" + race.season + "r" + race.round,
-                    }}
-                  />
-                )
+                <>No Race Details Present</>
+              ),
+              [RaceInformationTabs.results]: (
+                <RaceResultsPanel
+                  {...{
+                    results: getRaceData<RaceResult[]>("Results"),
+                    resultId: "s" + race.season + "r" + race.round,
+                  }}
+                />
               ),
               [RaceInformationTabs.standings]: <>Season goes here!</>,
             }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]
-          }
+            // { ["Details"]: <RaceDetails race={race} /> }[
+            //   raceCTX?.state.raceInfoTab
+            // ]
+          )}
         </Box>
       </Box>
     </Box>

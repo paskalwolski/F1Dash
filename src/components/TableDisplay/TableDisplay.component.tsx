@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { ResultsTableData } from "../../types/global";
+import { RaceResultTableData } from "../../types/TableData";
 
 type Props = {
   keys: string[];
-  data: ResultsTableData[];
+  data: RaceResultTableData[];
 };
 export const TableDisplay = ({ keys, data }: Props) => {
   const [visibleData, setVisibleData] = useState<string[]>(keys);
@@ -22,7 +22,7 @@ export const TableDisplay = ({ keys, data }: Props) => {
           return (
             <tr key={"p" + res.position}>
               {keys.map((cell) => {
-                const resultKey = cell as keyof ResultsTableData;
+                const resultKey = cell as keyof RaceResultTableData;
                 return (
                   <td key={"p" + res.position + "d" + cell}>
                     {res[resultKey]}
