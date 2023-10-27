@@ -1,5 +1,4 @@
-import { Race, RaceTable } from "../../types/global";
-import { RaceInformationTabs } from "../context.types";
+import { Race, RaceDataTypes, RaceTable } from "../../types/global";
 
 // export enum RaceActions {
 //   SET_RACE = "set_race",
@@ -17,12 +16,12 @@ export enum RaceActions {
 
 type SetRaceType = {
   type: RaceActions.SET_RACE;
-  payload: { race: Race; infoTab?: RaceInformationTabs };
+  payload: { race: Race; infoTab?: keyof RaceDataTypes };
 };
 
 type SetInfoTabType = {
   type: RaceActions.SET_INFO_TAB;
-  payload: RaceInformationTabs;
+  payload: keyof RaceDataTypes;
 };
 
 type SetSeasonRacetableType = {

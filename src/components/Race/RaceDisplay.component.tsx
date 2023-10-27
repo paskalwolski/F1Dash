@@ -1,13 +1,17 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { RaceContext } from "../../contexts/ContextProvider";
-import { RaceInformationTabs } from "../../contexts/context.types";
 import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
-import { Race, RaceDataTypes, RaceResult } from "../../types/global";
-import RaceResultsPanel from "./RaceResultsPanel.component";
+import {
+  ConstructorStanding,
+  DriverStanding,
+  QualifyingResult,
+  Race,
+  RaceDataTypes,
+} from "../../types/global";
 
 type PropTypes = {
   race: Race;
@@ -15,7 +19,7 @@ type PropTypes = {
 
 export const RaceDisplay = ({ race }: PropTypes) => {
   const [raceData, setRaceData] = useState<RaceDataTypes>({ Details: race });
-  const [loadingData, setLoadingData] = useState<boolean>(true);
+  const [loadingData, setLoadingData] = useState<boolean>(false);
 
   const raceCTX = useContext(RaceContext);
 
@@ -35,28 +39,60 @@ export const RaceDisplay = ({ race }: PropTypes) => {
   //     });
   // }, [raceId]);
 
-  const getRaceData = <T,>(key: keyof RaceDataTypes) => {
+  const availableRaceData: (keyof RaceDataTypes)[] = useMemo(() => {
+    const values: (keyof RaceDataTypes)[] = [
+      "Details",
+      "Results",
+      "Qualifying",
+      "ConstructorStandings",
+      "DriverStandings",
+    ];
+    if (race.Sprint) {
+      values.push("Sprint");
+    }
+    return values;
+  }, [raceId]);
+
+  useEffect(() => {
+    if (raceCTX?.state.raceInfoTab) {
+      getRaceData(raceCTX?.state?.raceInfoTab);
+    }
+  }, [raceCTX?.state.raceInfoTab]);
+
+  useEffect(() => {
+    console.log(raceData);
+  }, [raceData]);
+
+  const getRaceData = (key: keyof RaceDataTypes) => {
     if (key in raceData) {
-      console.log("Using stored data...");
-      return raceData[key] as T;
+      console.log("Key Already Fetched");
+      setLoadingData(false);
     } else {
       console.log("Fetching new data...");
       setLoadingData(true);
+      console.log(race.season, race.round, key);
       fetch(`http://ergast.com/api/f1/${race.season}/${race.round}/${key}.json`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           let results;
           switch (key) {
             case "DriverStandings":
-              results = data.MRData.StandingsLists[0].DriverStandings as T;
+              results = data.MRData.StandingsTable.StandingsLists[0]
+                .DriverStandings as DriverStanding[];
               break;
             case "ConstructorStandings":
-              results = data.MRData.StandingsLists[0].ConstructorStandings as T;
+              results = data.MRData.StandingsTable.StandingsLists[0]
+                .ConstructorStandings as ConstructorStanding[];
               break;
+            case "Qualifying":
+              results = data.MRData.RaceTable.Races[0]
+                .QualifyingResult as QualifyingResult[];
+              break;
+            case "Results":
           }
-          setRaceData({ ...data, [key]: results });
+          setRaceData({ ...raceData, [key]: results });
           setLoadingData(false);
-          return results;
         })
         .catch((e) => {
           console.log(e);
@@ -91,12 +127,15 @@ export const RaceDisplay = ({ race }: PropTypes) => {
       <Box>
         <Tabs
           value={raceCTX?.state.raceInfoTab}
-          onChange={(_, v: RaceInformationTabs) => {
+          onChange={(_, v: keyof RaceDataTypes) => {
             raceCTX?.dispatch({ type: RaceActions.SET_INFO_TAB, payload: v });
           }}
           sx={{ pl: 2 }}
         >
-          <Tab
+          {availableRaceData.map((data) => {
+            return <Tab label={data} value={data} key={data} />;
+          })}
+          {/* <Tab
             label={RaceInformationTabs.details}
             value={RaceInformationTabs.details}
             key={RaceInformationTabs.details}
@@ -110,28 +149,32 @@ export const RaceDisplay = ({ race }: PropTypes) => {
             label={RaceInformationTabs.standings}
             value={RaceInformationTabs.standings}
             key={RaceInformationTabs.standings}
-          />
+        /> */}
         </Tabs>
         <Box sx={{ padding: "8px" }}>
           {loadingData ? (
             <CarLoader />
           ) : (
             {
-              [RaceInformationTabs.details]: raceData.Details ? (
+              ["Details"]: raceData.Details ? (
                 <RaceDetails {...{ race: raceData.Details }} />
               ) : (
                 <>No Race Details Present</>
               ),
-              [RaceInformationTabs.results]: (
-                <RaceResultsPanel
-                  {...{
-                    results: getRaceData<RaceResult[]>("Results"),
-                    resultId: "s" + race.season + "r" + race.round,
-                  }}
-                />
+              ["Results"]: (
+                <>No Race Results Present</>
+                // <RaceResultsPanel
+                //   {...{
+                //     results: getRaceData<RaceResult[]>("Results"),
+                //     resultId: "s" + race.season + "r" + race.round,
+                //   }}
+                // />
               ),
-              [RaceInformationTabs.standings]: <>Season goes here!</>,
-            }[raceCTX?.state.raceInfoTab ?? RaceInformationTabs.details]
+              ["ConstructorStandings"]: <>CStandings goes here!</>,
+              ["Qualifying"]: <>Quali Goes here</>,
+              ["Sprint"]: <>Sprint Goes Here</>,
+              ["DriverStandings"]: <>Driver Goes here</>,
+            }[raceCTX?.state.raceInfoTab ?? "Details"]
             // { ["Details"]: <RaceDetails race={race} /> }[
             //   raceCTX?.state.raceInfoTab
             // ]

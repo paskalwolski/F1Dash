@@ -1,5 +1,5 @@
 import { Race, RaceTable } from "../../types/global";
-import { RaceInformationTabs, RaceState } from "../context.types";
+import { RaceState } from "../context.types";
 import { RaceActionTypes, RaceActions } from "./raceReducer.actions";
 
 export const RaceReducer = (
@@ -13,7 +13,7 @@ export const RaceReducer = (
         selectedRace: action.payload.race,
         raceInfoTab: action.payload.infoTab
           ? action.payload.infoTab
-          : RaceInformationTabs.details,
+          : "Details",
       };
     }
     case RaceActions.SET_INFO_TAB: {
@@ -27,7 +27,7 @@ export const RaceReducer = (
         ...state,
         seasonRaceTable: action.payload,
         selectedRace: selectMostRecentRace(action.payload),
-        raceInfoTab: RaceInformationTabs.details,
+        raceInfoTab: "Details",
         raceTableLoading: false,
       };
     }

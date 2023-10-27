@@ -97,7 +97,37 @@ export type ConstructorStanding = Standing & {
   Constructor: Constructor;
 };
 
-export type QualifyingResult = {};
+export type QualifyingResult = {
+  number: string;
+  position: string;
+  Driver: Driver;
+  Constructor: Constructor;
+  Q1: string;
+  Q2: string;
+  Q3: string;
+};
+
+export type SprintResult = {
+  number: string;
+  position: string;
+  positionText: string;
+  points: string;
+  Driver: Driver;
+  Constructor: Constructor;
+  grid: string;
+  laps: string;
+  status: string;
+  Time: {
+    millis: string;
+    time: string;
+  };
+  FastestLap: {
+    lap: string;
+    Time: {
+      time: string;
+    };
+  };
+};
 
 export type ResultTypes = {
   Results?: RaceResult[];

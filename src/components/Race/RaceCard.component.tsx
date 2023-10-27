@@ -13,7 +13,6 @@ import {
   RaceActionTypes,
   RaceActions,
 } from "../../contexts/race/raceReducer.actions";
-import { RaceInformationTabs } from "../../contexts/context.types";
 
 interface propTypes {
   race: Race;
@@ -81,7 +80,7 @@ export const RaceCard = React.memo(
                   type: RaceActions.SET_RACE,
                   payload: {
                     race,
-                    infoTab: RaceInformationTabs.results,
+                    infoTab: "Results",
                   },
                 });
               }}
@@ -96,12 +95,12 @@ export const RaceCard = React.memo(
                   type: RaceActions.SET_RACE,
                   payload: {
                     race,
-                    infoTab: RaceInformationTabs.standings,
+                    infoTab: "Qualifying",
                   },
                 });
               }}
             >
-              Standings
+              Qualifying
             </Button>
           </CardActions>
         )}

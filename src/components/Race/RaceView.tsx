@@ -2,7 +2,7 @@ import { useReducer, useEffect } from "react";
 
 import { RaceSelectionPanel } from "./RaceSelectionPanel";
 import { RaceTable } from "../../types/global";
-import { RaceInformationTabs, RaceState } from "../../contexts/context.types";
+import { RaceState } from "../../contexts/context.types";
 import { RaceContext } from "../../contexts/ContextProvider";
 
 import { RaceReducer } from "../../contexts/race/raceReducer";
@@ -15,7 +15,7 @@ type Props = {
 
 const RaceView = ({ seasonUrl }: Props) => {
   const initialRaceState: RaceState = {
-    raceInfoTab: RaceInformationTabs.details,
+    raceInfoTab: "Details",
     raceTableLoading: true,
   };
 
