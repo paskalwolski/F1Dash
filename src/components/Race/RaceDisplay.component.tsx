@@ -11,7 +11,9 @@ import {
   QualifyingResult,
   Race,
   RaceDataTypes,
+  RaceResult,
 } from "../../types/global";
+import RaceResultsPanel from "./RaceResultsPanel.component";
 
 type PropTypes = {
   race: Race;
@@ -26,18 +28,6 @@ export const RaceDisplay = ({ race }: PropTypes) => {
   const raceId = useMemo(() => {
     return race.season + "r" + race.round;
   }, [race.round, race.season]);
-
-  // useEffect(() => {
-  //   const selectedSeason = race.season;
-  //   const selectedRound = race.round;
-  //   const url = `http://ergast.com/api/f1/${selectedSeason}/${selectedRound}/results.json`;
-  //   fetch(url)
-  //     .then((data) => data.json())
-  //     .then((res) => {
-  //       setRaceData({ Details: res.MRData.RaceTable.Races[0].Results as Race });
-  //       setLoadingData(false);
-  //     });
-  // }, [raceId]);
 
   const availableRaceData: (keyof RaceDataTypes)[] = useMemo(() => {
     const values: (keyof RaceDataTypes)[] = [
@@ -65,16 +55,14 @@ export const RaceDisplay = ({ race }: PropTypes) => {
 
   const getRaceData = (key: keyof RaceDataTypes) => {
     if (key in raceData) {
-      console.log("Key Already Fetched");
+      // console.log("Key Already Fetched");
       setLoadingData(false);
     } else {
-      console.log("Fetching new data...");
+      // console.log("Fetching new data...");
       setLoadingData(true);
-      console.log(race.season, race.round, key);
       fetch(`http://ergast.com/api/f1/${race.season}/${race.round}/${key}.json`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           let results;
           switch (key) {
             case "DriverStandings":
@@ -90,12 +78,15 @@ export const RaceDisplay = ({ race }: PropTypes) => {
                 .QualifyingResult as QualifyingResult[];
               break;
             case "Results":
+              results = data.MRData.RaceTable.Races[0].Results as RaceResult[];
+              break;
           }
+          console.log(key + ": " + results);
           setRaceData({ ...raceData, [key]: results });
           setLoadingData(false);
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
         });
     }
   };
@@ -135,21 +126,6 @@ export const RaceDisplay = ({ race }: PropTypes) => {
           {availableRaceData.map((data) => {
             return <Tab label={data} value={data} key={data} />;
           })}
-          {/* <Tab
-            label={RaceInformationTabs.details}
-            value={RaceInformationTabs.details}
-            key={RaceInformationTabs.details}
-          />
-          <Tab
-            label={RaceInformationTabs.results}
-            value={RaceInformationTabs.results}
-            key={RaceInformationTabs.results}
-          />
-          <Tab
-            label={RaceInformationTabs.standings}
-            value={RaceInformationTabs.standings}
-            key={RaceInformationTabs.standings}
-        /> */}
         </Tabs>
         <Box sx={{ padding: "8px" }}>
           {loadingData ? (
@@ -162,13 +138,13 @@ export const RaceDisplay = ({ race }: PropTypes) => {
                 <>No Race Details Present</>
               ),
               ["Results"]: (
-                <>No Race Results Present</>
-                // <RaceResultsPanel
-                //   {...{
-                //     results: getRaceData<RaceResult[]>("Results"),
-                //     resultId: "s" + race.season + "r" + race.round,
-                //   }}
-                // />
+                // <>No Race Results Present</>
+                <RaceResultsPanel
+                  {...{
+                    results: raceData.Results,
+                    resultId: "s" + race.season + "r" + race.round,
+                  }}
+                />
               ),
               ["ConstructorStandings"]: <>CStandings goes here!</>,
               ["Qualifying"]: <>Quali Goes here</>,
