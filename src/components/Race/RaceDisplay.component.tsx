@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { RaceContext } from "../../contexts/ContextProvider";
 import { RaceActions } from "../../contexts/race/raceReducer.actions";
-import { RaceDetails } from "./RaceDetails.component";
+import { RaceDetails } from "./RaceDetails/RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
 import {
@@ -13,13 +13,14 @@ import {
   RaceDataTypes,
   RaceResult,
 } from "../../types/global";
-import RaceResultsPanel from "./RaceResultsPanel.component";
+import RaceResultsPanel from "./RaceDetails/RaceResultsPanel.component";
 
 type PropTypes = {
   race: Race;
 };
 
 export const RaceDisplay = ({ race }: PropTypes) => {
+  // Can I extract this to a hook -> usePartialData?
   const [raceData, setRaceData] = useState<RaceDataTypes>({ Details: race });
   const [loadingData, setLoadingData] = useState<boolean>(false);
 
@@ -47,7 +48,7 @@ export const RaceDisplay = ({ race }: PropTypes) => {
     if (raceCTX?.state.raceInfoTab) {
       getRaceData(raceCTX?.state?.raceInfoTab);
     }
-  }, [raceCTX?.state.raceInfoTab]);
+  }, [raceCTX?.state.raceInfoTab, raceId]);
 
   // useEffect(() => {
   //   console.log(raceData);
@@ -136,7 +137,7 @@ export const RaceDisplay = ({ race }: PropTypes) => {
               ) : (
                 <>No Race Details Present</>
               ),
-              ["Results"]: (
+              ["Results"]: raceData.Results ? (
                 // <>No Race Results Present</>
                 <RaceResultsPanel
                   {...{
@@ -144,6 +145,8 @@ export const RaceDisplay = ({ race }: PropTypes) => {
                     resultId: "s" + race.season + "r" + race.round,
                   }}
                 />
+              ) : (
+                <>There was a problem fetching the Race Results</>
               ),
               ["ConstructorStandings"]: <>CStandings goes here!</>,
               ["Qualifying"]: <>Quali Goes here</>,
