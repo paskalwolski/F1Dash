@@ -117,11 +117,11 @@ export type SprintResult = {
   grid: string;
   laps: string;
   status: string;
-  Time: {
+  Time?: {
     millis: string;
     time: string;
   };
-  FastestLap: {
+  FastestLap?: {
     lap: string;
     Time: {
       time: string;

@@ -24,11 +24,10 @@ const RaceResultsPanel = ({ results, resultId }: Props) => {
         isFastestLap: res.FastestLap?.rank == "1" ? true : false,
         fastestLapRank: Number(res.FastestLap?.rank),
         fastestLapNumber: Number(res.FastestLap?.lap),
-        fastestLapTime: res.FastestLap.Time.time,
-        AverageSpeed: Number(res.FastestLap.AverageSpeed.speed),
+        fastestLapTime: res.FastestLap?.Time.time,
+        AverageSpeed: Number(res.FastestLap?.AverageSpeed.speed),
       };
     });
-    console.log(tableDataContainer[1]);
     return tableDataContainer;
   }, [resultId]);
 
