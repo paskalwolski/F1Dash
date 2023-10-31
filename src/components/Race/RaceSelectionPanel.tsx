@@ -10,10 +10,22 @@ import { CarLoader } from "../CarLoader/CarLoader";
 export const RaceSelectionPanel = () => {
   const raceContext: RaceContextTypes | null = useContext(RaceContext);
 
+  const raceId = useMemo(() => {
+    return (
+      "s" +
+      raceContext?.state.selectedRace?.season +
+      "r" +
+      raceContext?.state.selectedRace?.round
+    );
+  }, [raceContext?.state.selectedRace]);
+
   const selectedRace = useMemo(
-    () => raceContext?.state.selectedRace,
+    () => {
+      // console.log("New Race: " + raceContext?.state.selectedRace?.raceName);
+      return raceContext?.state.selectedRace;
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [raceContext?.state.selectedRace?.raceName]
+    [raceId]
   );
 
   const seasonRaceTable = useMemo(
@@ -35,7 +47,7 @@ export const RaceSelectionPanel = () => {
       >
         <Grid md={10} xs={12} item maxHeight="95%">
           {selectedRace ? (
-            <RaceDisplay {...{ race: selectedRace }} />
+            <RaceDisplay key={raceId} {...{ raceId, race: selectedRace }} />
           ) : (
             <div>Please select a race</div>
           )}

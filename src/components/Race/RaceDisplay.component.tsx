@@ -17,18 +17,24 @@ import RaceResultsPanel from "./RaceDetails/RaceResultsPanel.component";
 
 type PropTypes = {
   race: Race;
+  raceId: string;
 };
 
-export const RaceDisplay = ({ race }: PropTypes) => {
+export const RaceDisplay = ({ raceId, race }: PropTypes) => {
   // Can I extract this to a hook -> usePartialData?
   const [raceData, setRaceData] = useState<RaceDataTypes>({ Details: race });
-  const [loadingData, setLoadingData] = useState<boolean>(false);
+  const [loadingData, setLoadingData] = useState<boolean>(true);
 
   const raceCTX = useContext(RaceContext);
 
-  const raceId = useMemo(() => {
-    return race.season + "r" + race.round;
-  }, [race.round, race.season]);
+  // useEffect(() => {
+  //   setLoadingData(true);
+  //   setRaceData({});
+  // }, [raceId]);
+
+  useEffect(() => {
+    console.log(race);
+  }, [race]);
 
   const availableRaceData: (keyof RaceDataTypes)[] = useMemo(() => {
     const values: (keyof RaceDataTypes)[] = [
