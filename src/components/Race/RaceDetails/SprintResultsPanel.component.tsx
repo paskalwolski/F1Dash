@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { SprintResultTableData } from "../../../types/TableData";
-import { SprintResult } from "../../../types/global";
 import { TableDisplay } from "../../TableDisplay/TableDisplay.component";
 import { Box } from "@mui/material";
 

@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { QualiResultTableData } from "../../../types/TableData";
-import { QualifyingResult } from "../../../types/global";
 import { TableDisplay } from "../../TableDisplay/TableDisplay.component";
 import { Box } from "@mui/material";
 

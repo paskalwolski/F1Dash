@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { DriverStandingTableData } from "../../../types/TableData";
-import { DriverStanding } from "../../../types/global";
 import { TableDisplay } from "../../TableDisplay/TableDisplay.component";
 import { Box } from "@mui/material";
 

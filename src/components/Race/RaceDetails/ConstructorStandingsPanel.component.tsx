@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { ConstructorStandingTableData } from "../../../types/TableData";
-import { ConstructorStanding } from "../../../types/global";
 import { TableDisplay } from "../../TableDisplay/TableDisplay.component";
 import { Box } from "@mui/material";
 
