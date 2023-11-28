@@ -1,5 +1,4 @@
 import { Dispatch } from "react";
-import { Race, RaceDataTypes, RaceTable } from "../types/global.js";
 import { RaceActionTypes } from "./race/raceReducer.actions.js";
 
 export type RaceState = {

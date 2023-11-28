@@ -5,14 +5,6 @@ import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails/RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
-import {
-  ConstructorStanding,
-  DriverStanding,
-  QualifyingResult,
-  Race,
-  RaceDataTypes,
-  RaceResult,
-} from "../../types/global";
 import RaceResultsPanel from "./RaceDetails/RaceResultsPanel.component";
 import { ConstructorStandingsPanel } from "./RaceDetails/ConstructorStandingsPanel.component";
 import { QualiResultsPanel } from "./RaceDetails/QualiResultsPanel.component";
@@ -46,12 +38,14 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
     "Sprint" in race && values.push("Sprint");
     values.push("DriverStandings", "ConstructorStandings");
     return values;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceId]);
 
   useEffect(() => {
     if (raceCTX?.state.raceInfoTab) {
       getRaceData(raceCTX?.state?.raceInfoTab);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceCTX?.state.raceInfoTab, raceId]);
 
   // useEffect(() => {

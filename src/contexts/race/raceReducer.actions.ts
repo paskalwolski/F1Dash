@@ -1,4 +1,3 @@
-import { Race, RaceDataTypes, RaceTable } from "../../types/global";
 
 // export enum RaceActions {
 //   SET_RACE = "set_race",

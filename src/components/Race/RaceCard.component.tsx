@@ -1,5 +1,4 @@
 import React from "react";
-import { Race } from "../../types/global";
 import {
   Card,
   CardContent,
