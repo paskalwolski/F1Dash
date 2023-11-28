@@ -14,6 +14,10 @@ import {
   RaceResult,
 } from "../../types/global";
 import RaceResultsPanel from "./RaceDetails/RaceResultsPanel.component";
+import { ConstructorStandingsPanel } from "./RaceDetails/ConstructorStandingsPanel.component";
+import { QualiResultsPanel } from "./RaceDetails/QualiResultsPanel.component";
+import { SprintResultsPanel } from "./RaceDetails/SprintResultsPanel.component";
+import { DriverStandingsPanel } from "./RaceDetails/DriverStandingsPanel.component";
 
 type PropTypes = {
   race: Race;
@@ -32,21 +36,15 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
   //   setRaceData({});
   // }, [raceId]);
 
-  useEffect(() => {
-    console.log(race);
-  }, [race]);
+  // useEffect(() => {
+  //   console.log(race);
+  // }, [race]);
 
   const availableRaceData: (keyof RaceDataTypes)[] = useMemo(() => {
-    const values: (keyof RaceDataTypes)[] = [
-      "Details",
-      "Results",
-      "Qualifying",
-      "ConstructorStandings",
-      "DriverStandings",
-    ];
-    if (race.Sprint) {
-      values.push("Sprint");
-    }
+    const values: (keyof RaceDataTypes)[] = ["Details", "Results"];
+    "Qualifying" in race && values.push("Qualifying");
+    "Sprint" in race && values.push("Sprint");
+    values.push("DriverStandings", "ConstructorStandings");
     return values;
   }, [raceId]);
 
@@ -81,8 +79,10 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 .ConstructorStandings as ConstructorStanding[];
               break;
             case "Qualifying":
+              console.log(data.MRData);
               results = data.MRData.RaceTable.Races[0]
-                .QualifyingResult as QualifyingResult[];
+                .QualifyingResults as QualifyingResult[];
+              console.log(results);
               break;
             case "Results":
               results = data.MRData.RaceTable.Races[0].Results as RaceResult[];
@@ -95,6 +95,15 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
           console.error(e);
         });
     }
+  };
+
+  const sessionMap = {
+    DriverStandings: "Driver Standings",
+    ConstructorStandings: "Constructor Standings",
+    Qualifying: "Qualifying",
+    Results: "Results",
+    Details: "Details",
+    Sprint: "Sprint",
   };
 
   return (
@@ -130,7 +139,7 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
           sx={{ pl: 2 }}
         >
           {availableRaceData.map((data) => {
-            return <Tab label={data} value={data} key={data} />;
+            return <Tab label={sessionMap[data]} value={data} key={data} />;
           })}
         </Tabs>
         <Box sx={{ padding: "8px" }}>
@@ -148,16 +157,46 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 <RaceResultsPanel
                   {...{
                     results: raceData.Results,
-                    resultId: "s" + race.season + "r" + race.round,
+                    resultId: raceId + "r" + race.round,
                   }}
                 />
               ) : (
                 <>There was a problem fetching the Race Results</>
               ),
-              ["ConstructorStandings"]: <>CStandings goes here!</>,
-              ["Qualifying"]: <>Quali Goes here</>,
-              ["Sprint"]: <>Sprint Goes Here</>,
-              ["DriverStandings"]: <>Driver Goes here</>,
+              ["ConstructorStandings"]: raceData.ConstructorStandings ? (
+                <ConstructorStandingsPanel
+                  {...{
+                    results: raceData.ConstructorStandings,
+                    resultId: raceId + "cs",
+                  }}
+                />
+              ) : (
+                <>There was a problem with the Constructor Data</>
+              ),
+              ["Qualifying"]: raceData.Qualifying ? (
+                <QualiResultsPanel
+                  {...{ results: raceData.Qualifying, resultId: raceId + "q" }}
+                />
+              ) : (
+                <>There was a problem with the Qualifying Data</>
+              ),
+              ["Sprint"]: raceData.Sprint ? (
+                <SprintResultsPanel
+                  {...{ results: raceData.Sprint, resultId: raceId + "sp" }}
+                />
+              ) : (
+                <>There was a problem with the Sprint Data</>
+              ),
+              ["DriverStandings"]: raceData.DriverStandings ? (
+                <DriverStandingsPanel
+                  {...{
+                    results: raceData.DriverStandings,
+                    resultId: raceId + "ds",
+                  }}
+                />
+              ) : (
+                <>There was a problem with the Driver Standings</>
+              ),
             }[raceCTX?.state.raceInfoTab ?? "Details"]
             // { ["Details"]: <RaceDetails race={race} /> }[
             //   raceCTX?.state.raceInfoTab

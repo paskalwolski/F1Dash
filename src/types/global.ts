@@ -137,4 +137,7 @@ export type ResultTypes = {
   DriverStandings?: DriverStanding[];
 };
 
+export type RawResultData = RaceResult | QualifyingResult | SprintResult | ConstructorStanding | DriverStanding;
+export type RawResultTypes = keyof ResultTypes
+
 export type RaceDataTypes = ResultTypes & { Details: Race };

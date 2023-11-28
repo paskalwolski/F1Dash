@@ -3,8 +3,8 @@ export type TableData =
   | QualiResultTableData
   | SprintResultTableData
   | ConstructorStandingTableData
-  | DriverStandingTableData;
-
+  | DriverStandingTableData
+  | [];
 export type RaceResultTableData = {
   number: number;
   position: number;
@@ -31,7 +31,16 @@ export type QualiResultTableData = {
   Q3: string;
 };
 
-export type SprintResultTableData = RaceResultTableData;
+export type SprintResultTableData = {
+  position: number;
+  number: number;
+  points: number;
+  Driver: string;
+  Constructor: string;
+  grid: number;
+  laps: number;
+  status: string;
+}
 
 export type ConstructorStandingTableData = {
   position: number;
