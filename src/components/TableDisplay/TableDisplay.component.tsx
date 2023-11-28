@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TableData } from "../../types/TableData";
 
 type Props<T extends TableData> = {
@@ -16,19 +16,68 @@ export const TableDisplay = <T extends TableData>({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultId]);
 
-  const [visibleData, setVisibleData] = useState<(keyof T)[]>(keys);
+  const [sortedData, setSortedData] = useState<T[]>(data);
+
+  const [visibleColumns, setVisibleColumns] = useState<(keyof T)[]>(keys);
+  const [sortByColumn, setSortByColumn] = useState<keyof T | undefined>(
+    undefined
+  );
+  const [isAscending, setIsAscending] = useState<boolean | undefined>(
+    undefined
+  );
+
+  const handleColumnClick = (k: keyof T) => {
+    if (!isAscending) {
+      setIsAscending(false);
+    }
+
+    setSortByColumn(k);
+    setIsAscending(!isAscending);
+  };
+
+  useEffect(() => {
+    if (sortByColumn) {
+      const sortingData = [...data];
+      sortingData.sort((a, b) => {
+        const aVal = a[sortByColumn];
+        const bVal = b[sortByColumn];
+
+        let preSort = 0;
+
+        if (aVal > bVal) {
+          preSort = 1;
+        } else if (aVal < bVal) {
+          preSort = -1;
+        } else {
+          preSort = 0;
+        }
+        return isAscending ? preSort : preSort * -1;
+        // return a[sortByColumn] - b[sortByColumn];
+      });
+
+      setSortedData(sortingData);
+    }
+  }, [isAscending, sortByColumn, data]);
 
   return (
     <table>
       <thead>
         <tr>
-          {keys.map((k, i) => (
-            <th key={"k" + i}>{k.toString().toUpperCase()}</th>
+          {visibleColumns.map((k, i) => (
+            <th
+              key={"k" + i}
+              onClick={() => {
+                console.log("Sorting by col ", k, ": ", isAscending);
+                handleColumnClick(k);
+              }}
+            >
+              {k.toString().toUpperCase()}
+            </th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((entry: T, i) => {
+        {sortedData.map((entry: T, i) => {
           return (
             <tr key={"r" + i}>
               {keys.map((cell, j) => {
