@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { TableData } from "../../types/TableData";
+import {
+  KeyboardDoubleArrowUp,
+  KeyboardDoubleArrowDown,
+} from "@mui/icons-material";
 
 type Props<T extends TableData> = {
   data: T[];
@@ -59,6 +63,16 @@ export const TableDisplay = <T extends TableData>({
     }
   }, [isAscending, sortByColumn, data]);
 
+  const getSortIcon = (kVal: keyof T) => {
+    if (kVal === sortByColumn) {
+      return isAscending ? (
+        <KeyboardDoubleArrowUp />
+      ) : (
+        <KeyboardDoubleArrowDown />
+      );
+    }
+  };
+
   return (
     <table>
       <thead>
@@ -67,11 +81,13 @@ export const TableDisplay = <T extends TableData>({
             <th
               key={"k" + i}
               onClick={() => {
-                console.log("Sorting by col ", k, ": ", isAscending);
                 handleColumnClick(k);
               }}
             >
-              {k.toString().toUpperCase()}
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                {k.toString().toUpperCase()}
+                {getSortIcon(k)}
+              </div>
             </th>
           ))}
         </tr>
