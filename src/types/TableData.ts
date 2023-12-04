@@ -4,7 +4,8 @@ export type TableData =
   | SprintResultTableData
   | ConstructorStandingTableData
   | DriverStandingTableData
-  | [];
+  | object;
+
 export type RaceResultTableData = {
   number: number;
   position: number;
@@ -40,7 +41,7 @@ export type SprintResultTableData = {
   grid: number;
   laps: number;
   status: string;
-}
+};
 
 export type ConstructorStandingTableData = {
   position: number;

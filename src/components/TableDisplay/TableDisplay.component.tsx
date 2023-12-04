@@ -1,31 +1,31 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { TableData } from "../../types/TableData";
 import {
   KeyboardDoubleArrowUp,
   KeyboardDoubleArrowDown,
 } from "@mui/icons-material";
-import { Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 type Props<T extends TableData> = {
   data: T[];
-  resultId: string;
+  visibleColumns: (keyof T)[];
 };
 export const TableDisplay = <T extends TableData>({
   data,
-  resultId,
+  visibleColumns,
 }: Props<T>) => {
   const theme = useTheme();
 
-  const keys: (keyof T)[] = useMemo(() => {
-    const egKeys = Object.keys(data[0]);
-    const finalKeys = egKeys as (keyof T)[];
-    return finalKeys;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resultId]);
+  // const keys: (keyof T)[] = useMemo(() => {
+  //   const egKeys = Object.keys(data[0]);
+  //   const finalKeys = egKeys as (keyof T)[];
+  //   return finalKeys;
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [resultId]);
 
   const [sortedData, setSortedData] = useState<T[]>(data);
 
-  const [visibleColumns, setVisibleColumns] = useState<(keyof T)[]>(keys);
+  // const [visibleColumns, setVisibleColumns] = useState<(keyof T)[]>(keys);
   const [sortByColumn, setSortByColumn] = useState<keyof T | undefined>(
     undefined
   );
@@ -82,97 +82,100 @@ export const TableDisplay = <T extends TableData>({
   };
 
   return (
-    <table
-      style={{
-        borderCollapse: "collapse",
-      }}
-    >
-      <thead>
-        {/* // TODO: Add in sections for top panel, and table panel. Scroll to hide top panel, then continue scrolling through table.
+    <Box sx={{ overflowX: "auto" }}>
+      <table
+        style={{
+          borderCollapse: "collapse",
+        }}
+      >
+        <thead>
+          {/* // TODO: Add in sections for top panel, and table panel. Scroll to hide top panel, then continue scrolling through table.
         // This also lets the thead be sticky
         <thead style={{ position: "sticky", top: "20px" }}> */}
-        <tr
-          style={{
-            minHeight: "1.2rem",
-            borderBottom: "2px solid black",
-          }}
-        >
-          {visibleColumns.map((k, i) => (
-            <th
-              key={"k" + i}
-              style={{
-                paddingBottom: "5px",
-                paddingTop: "5px",
-                color: k === sortByColumn ? theme.palette.info.dark : undefined,
-              }}
-              onClick={() => {
-                handleColumnClick(k);
-              }}
-            >
-              <div
+          <tr
+            style={{
+              minHeight: "1.2rem",
+              borderBottom: "2px solid black",
+            }}
+          >
+            {visibleColumns.map((k, i) => (
+              <th
+                key={"k" + i}
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  height: "1rem",
-                  marginLeft: "5px",
+                  paddingBottom: "5px",
+                  paddingTop: "5px",
+                  color:
+                    k === sortByColumn ? theme.palette.info.dark : undefined,
+                }}
+                onClick={() => {
+                  handleColumnClick(k);
                 }}
               >
-                <Typography variant="h6">{toTitleCase(k)}</Typography>
                 <div
                   style={{
-                    minWidth: "20px",
-                    maxWidth: "30px",
-                    paddingRight: "2px",
-                    paddingTop: "3px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    height: "1rem",
+                    marginLeft: "5px",
                   }}
                 >
-                  {getSortIcon(k)}
-                </div>
-              </div>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {sortedData.map((entry: T, i) => {
-          return (
-            <tr
-              key={"r" + i}
-              style={{
-                minHeight: "1.2rem",
-                borderBottom: "1px solid gray",
-              }}
-            >
-              {visibleColumns.map((cell, j) => {
-                const resultKey = cell as keyof T;
-                return (
-                  <td
-                    key={"r" + i + "c" + j}
+                  <Typography variant="h6">{toTitleCase(k)}</Typography>
+                  <div
                     style={{
-                      whiteSpace: "nowrap",
-                      alignItems: "center",
+                      minWidth: "20px",
+                      maxWidth: "30px",
+                      paddingRight: "2px",
+                      paddingTop: "3px",
                     }}
                   >
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        padding: "2px 3px 2px 5px",
-                        backgroundColor:
-                          resultKey === sortByColumn
-                            ? theme.palette.info.light
-                            : undefined,
+                    {getSortIcon(k)}
+                  </div>
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {sortedData.map((entry: T, i) => {
+            return (
+              <tr
+                key={"r" + i}
+                style={{
+                  minHeight: "1.2rem",
+                  borderBottom: "1px solid gray",
+                }}
+              >
+                {visibleColumns.map((cell, j) => {
+                  const resultKey = cell as keyof T;
+                  return (
+                    <td
+                      key={"r" + i + "c" + j}
+                      style={{
+                        whiteSpace: "nowrap",
+                        alignItems: "center",
                       }}
                     >
-                      {entry[resultKey] as string}
-                    </Typography>
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          padding: "2px 3px 2px 5px",
+                          backgroundColor:
+                            resultKey === sortByColumn
+                              ? theme.palette.info.light
+                              : undefined,
+                        }}
+                      >
+                        {entry[resultKey] as string}
+                      </Typography>
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </Box>
   );
 };

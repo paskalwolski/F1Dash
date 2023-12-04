@@ -145,6 +145,7 @@ declare global {
     | SprintResult
     | ConstructorStanding
     | DriverStanding;
+    
   export type RawResultTypes = keyof ResultTypes;
 
   export type RaceDataTypes = ResultTypes & { Details: Race };

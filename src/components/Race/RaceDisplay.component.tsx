@@ -5,11 +5,21 @@ import { RaceActions } from "../../contexts/race/raceReducer.actions";
 import { RaceDetails } from "./RaceDetails/RaceDetails.component";
 import { CarLoader } from "../CarLoader/CarLoader";
 
-import RaceResultsPanel from "./RaceDetails/RaceResultsPanel.component";
-import { ConstructorStandingsPanel } from "./RaceDetails/ConstructorStandingsPanel.component";
-import { QualiResultsPanel } from "./RaceDetails/QualiResultsPanel.component";
-import { SprintResultsPanel } from "./RaceDetails/SprintResultsPanel.component";
-import { DriverStandingsPanel } from "./RaceDetails/DriverStandingsPanel.component";
+import {
+  ConstructorStandingTableData,
+  DriverStandingTableData,
+  QualiResultTableData,
+  RaceResultTableData,
+  SprintResultTableData,
+} from "../../types/TableData";
+import {
+  getConstructorStandingTable,
+  getDriverStandingTable,
+  getQualiResultTable,
+  getResultTableData,
+  getSprintResultTable,
+} from "../TableDisplay/TableDataParser.util";
+import TableContainer from "../TableDisplay/TableContainer.component";
 
 type PropTypes = {
   race: Race;
@@ -95,7 +105,8 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
         pb: 1,
         borderColor: "primary.main",
         height: "100%",
-        overflow: "scroll",
+        overflowY: "scroll",
+        overflowX: "hidden",
       }}
     >
       <Typography variant="h3" sx={{ pb: 1 }}>
@@ -133,9 +144,9 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               ),
               ["Results"]: raceData.Results ? (
                 // <>No Race Results Present</>
-                <RaceResultsPanel
+                <TableContainer<RaceResultTableData>
                   {...{
-                    results: raceData.Results,
+                    data: getResultTableData(raceData.Results),
                     resultId: raceId + "r" + race.round,
                   }}
                 />
@@ -143,9 +154,11 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 <>There was a problem fetching the Race Results</>
               ),
               ["ConstructorStandings"]: raceData.ConstructorStandings ? (
-                <ConstructorStandingsPanel
+                <TableContainer<ConstructorStandingTableData>
                   {...{
-                    results: raceData.ConstructorStandings,
+                    data: getConstructorStandingTable(
+                      raceData.ConstructorStandings
+                    ),
                     resultId: raceId + "cs",
                   }}
                 />
@@ -153,23 +166,29 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 <>There was a problem with the Constructor Data</>
               ),
               ["Qualifying"]: raceData.Qualifying ? (
-                <QualiResultsPanel
-                  {...{ results: raceData.Qualifying, resultId: raceId + "q" }}
+                <TableContainer<QualiResultTableData>
+                  {...{
+                    data: getQualiResultTable(raceData.Qualifying),
+                    resultId: raceId + "q",
+                  }}
                 />
               ) : (
                 <>There was a problem with the Qualifying Data</>
               ),
               ["Sprint"]: raceData.Sprint ? (
-                <SprintResultsPanel
-                  {...{ results: raceData.Sprint, resultId: raceId + "sp" }}
+                <TableContainer<SprintResultTableData>
+                  {...{
+                    data: getSprintResultTable(raceData.Sprint),
+                    resultId: raceId + "sp",
+                  }}
                 />
               ) : (
                 <>There was a problem with the Sprint Data</>
               ),
               ["DriverStandings"]: raceData.DriverStandings ? (
-                <DriverStandingsPanel
+                <TableContainer<DriverStandingTableData>
                   {...{
-                    results: raceData.DriverStandings,
+                    data: getDriverStandingTable(raceData.DriverStandings),
                     resultId: raceId + "ds",
                   }}
                 />
@@ -177,7 +196,7 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 <>There was a problem with the Driver Standings</>
               ),
             }[raceCTX?.state.raceInfoTab ?? "Details"]
-            //TODO: Remove the different Panels. Calculate data on demand - could useMemo - and take it directly to the TableDisplay Panel
+            //TODO: Remove the different Panels. Calculate data on demand - could useMemo - and take it directly to the TableContainer Panel
             // { ["Details"]: <RaceDetails race={race} /> }[
             //   raceCTX?.state.raceInfoTab
             // ]
