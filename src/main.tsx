@@ -18,7 +18,9 @@ const theme = createTheme({
       main: "#A1E5AB",
     },
     info: {
-      main: "#CFF2D4",
+      // main: "#CFF2D4",
+      main: "#43C59E",
+      light: "rgba(104, 208, 177, 0.5)",
     },
     warning: {
       main: "#FF7D00",

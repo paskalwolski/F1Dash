@@ -23,15 +23,6 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
 
   const raceCTX = useContext(RaceContext);
 
-  // useEffect(() => {
-  //   setLoadingData(true);
-  //   setRaceData({});
-  // }, [raceId]);
-
-  // useEffect(() => {
-  //   console.log(race);
-  // }, [race]);
-
   const availableRaceData: (keyof RaceDataTypes)[] = useMemo(() => {
     const values: (keyof RaceDataTypes)[] = ["Details", "Results"];
     "Qualifying" in race && values.push("Qualifying");
@@ -48,16 +39,10 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [raceCTX?.state.raceInfoTab, raceId]);
 
-  // useEffect(() => {
-  //   console.log(raceData);
-  // }, [raceData]);
-
   const getRaceData = (key: keyof RaceDataTypes) => {
     if (key in raceData) {
-      // console.log("Key Already Fetched");
       setLoadingData(false);
     } else {
-      // console.log("Fetching new data...");
       setLoadingData(true);
       fetch(`http://ergast.com/api/f1/${race.season}/${race.round}/${key}.json`)
         .then((res) => res.json())
@@ -76,7 +61,6 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               console.log(data.MRData);
               results = data.MRData.RaceTable.Races[0]
                 .QualifyingResults as QualifyingResult[];
-              console.log(results);
               break;
             case "Results":
               results = data.MRData.RaceTable.Races[0].Results as RaceResult[];
@@ -108,6 +92,7 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
         borderRadius: 3,
         p: 2,
         pl: 4,
+        pb: 1,
         borderColor: "primary.main",
         height: "100%",
         overflow: "scroll",
@@ -192,6 +177,7 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 <>There was a problem with the Driver Standings</>
               ),
             }[raceCTX?.state.raceInfoTab ?? "Details"]
+            //TODO: Remove the different Panels. Calculate data on demand - could useMemo - and take it directly to the TableDisplay Panel
             // { ["Details"]: <RaceDetails race={race} /> }[
             //   raceCTX?.state.raceInfoTab
             // ]
