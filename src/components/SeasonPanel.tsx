@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Season } from "../types/global";
 
 export const SeasonPanel = () => {
   const [seasons, setSeasons] = useState<Season[] | undefined>(undefined);
