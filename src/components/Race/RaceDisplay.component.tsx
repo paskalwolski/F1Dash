@@ -12,13 +12,7 @@ import {
   RaceResultTableData,
   SprintResultTableData,
 } from "../../types/TableData";
-import {
-  getConstructorStandingTable,
-  getDriverStandingTable,
-  getQualiResultTable,
-  getResultTableData,
-  getSprintResultTable,
-} from "../TableDisplay/TableDataParser.util";
+
 import TableContainer from "../TableDisplay/TableContainer.component";
 
 type PropTypes = {
@@ -68,7 +62,6 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 .ConstructorStandings as ConstructorStanding[];
               break;
             case "Qualifying":
-              console.log(data.MRData);
               results = data.MRData.RaceTable.Races[0]
                 .QualifyingResults as QualifyingResult[];
               break;
@@ -77,13 +70,17 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               break;
           }
           setRaceData({ ...raceData, [key]: results });
-          setLoadingData(false);
+          // setLoadingData(false);
         })
         .catch((e) => {
           console.error(e);
         });
     }
   };
+
+  useEffect(() => {
+    setLoadingData(false);
+  }, [raceData]);
 
   const sessionMap = {
     DriverStandings: "Driver Standings",
@@ -146,8 +143,9 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
                 // <>No Race Results Present</>
                 <TableContainer<RaceResultTableData>
                   {...{
-                    data: getResultTableData(raceData.Results),
+                    data: raceData.Results,
                     resultId: raceId + "r" + race.round,
+                    dataType: "Results",
                   }}
                 />
               ) : (
@@ -156,10 +154,9 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               ["ConstructorStandings"]: raceData.ConstructorStandings ? (
                 <TableContainer<ConstructorStandingTableData>
                   {...{
-                    data: getConstructorStandingTable(
-                      raceData.ConstructorStandings
-                    ),
+                    data: raceData.ConstructorStandings,
                     resultId: raceId + "cs",
+                    dataType: "ConstructorStandings",
                   }}
                 />
               ) : (
@@ -168,8 +165,9 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               ["Qualifying"]: raceData.Qualifying ? (
                 <TableContainer<QualiResultTableData>
                   {...{
-                    data: getQualiResultTable(raceData.Qualifying),
+                    data: raceData.Qualifying,
                     resultId: raceId + "q",
+                    dataType: "Qualifying",
                   }}
                 />
               ) : (
@@ -178,8 +176,9 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               ["Sprint"]: raceData.Sprint ? (
                 <TableContainer<SprintResultTableData>
                   {...{
-                    data: getSprintResultTable(raceData.Sprint),
+                    data: raceData.Sprint,
                     resultId: raceId + "sp",
+                    dataType: "Sprint",
                   }}
                 />
               ) : (
@@ -188,15 +187,15 @@ export const RaceDisplay = ({ raceId, race }: PropTypes) => {
               ["DriverStandings"]: raceData.DriverStandings ? (
                 <TableContainer<DriverStandingTableData>
                   {...{
-                    data: getDriverStandingTable(raceData.DriverStandings),
+                    data: raceData.DriverStandings,
                     resultId: raceId + "ds",
+                    dataType: "DriverStandings",
                   }}
                 />
               ) : (
                 <>There was a problem with the Driver Standings</>
               ),
             }[raceCTX?.state.raceInfoTab ?? "Details"]
-            //TODO: Remove the different Panels. Calculate data on demand - could useMemo - and take it directly to the TableContainer Panel
             // { ["Details"]: <RaceDetails race={race} /> }[
             //   raceCTX?.state.raceInfoTab
             // ]

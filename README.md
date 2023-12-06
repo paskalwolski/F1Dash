@@ -5,6 +5,15 @@ The objective of this project is to have a single place to view and analyse the 
 
 This program currently relies on the (Ergast API)[http://ergast.com/mrd/methods/results/], although this will be deprecated in 2024 - I am considering creating a custom backend for it in the near future.
 
+## Development
+
+This project has a dockerfile and a docker-compose file. Currently the docker-compose only builds one service, so there is little need for it - but this was a learning experience for me to allow for local development in a docker container. 
+
+To build and run the docker image simply execute: `docker-compose up --build`
+By default the docker file mounts the current directory - as it is located in the project root - and runs the vite app on default port 5173 both internally and externally. 
+
+Only the local `/src` directory is mounted to the container - this allows for Hot Reload/HMR to work for local development. 
+
 ## Design
 
 The app starts by selecting a View - by default the Race View, which shows all the races in a season.
@@ -23,3 +32,5 @@ Although there is as yet no root reducer, there is a reducer to handel the state
 ## Component Library
 
 This project uses MUI v5 for its custom components. More information can be found here: https://mui.com
+
+
