@@ -1,3 +1,21 @@
+export const fetchDataByType = <T>(
+  dataType: RawResultTypes,
+  data: RawResultData[]
+): T[] => {
+  switch (dataType) {
+    case "Results":
+      return getResultTableData(data as RaceResult[]) as T[];
+    case "Sprint":
+      return getSprintResultTable(data as SprintResult[]) as T[];
+    case "Qualifying":
+      return getQualiResultTable(data as QualifyingResult[]) as T[];
+    case "ConstructorStandings":
+      return getConstructorStandingTable(data as ConstructorStanding[]) as T[];
+    case "DriverStandings":
+      return getDriverStandingTable(data as DriverStanding[]) as T[];
+  }
+};
+
 export const getResultTableData = (data: RaceResult[]) => {
   const tableDataContainer = data.map((res: RaceResult) => {
     return {

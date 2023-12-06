@@ -7,25 +7,25 @@ import {
 import { Box, Typography, useTheme } from "@mui/material";
 
 type Props<T extends TableData> = {
+  keys: (keyof T)[];
   data: T[];
-  visibleColumns: (keyof T)[];
+  visibleColumns: { [key in keyof T]: boolean };
 };
 export const TableDisplay = <T extends TableData>({
+  keys,
   data,
   visibleColumns,
 }: Props<T>) => {
   const theme = useTheme();
 
-  // const keys: (keyof T)[] = useMemo(() => {
-  //   const egKeys = Object.keys(data[0]);
-  //   const finalKeys = egKeys as (keyof T)[];
-  //   return finalKeys;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [resultId]);
-
   const [sortedData, setSortedData] = useState<T[]>(data);
 
-  // const [visibleColumns, setVisibleColumns] = useState<(keyof T)[]>(keys);
+  useEffect(() => {
+    setSortedData(data);
+    setSortByColumn(undefined);
+    setIsAscending(undefined);
+  }, [data]);
+
   const [sortByColumn, setSortByColumn] = useState<keyof T | undefined>(
     undefined
   );
@@ -98,42 +98,47 @@ export const TableDisplay = <T extends TableData>({
               borderBottom: "2px solid black",
             }}
           >
-            {visibleColumns.map((k, i) => (
-              <th
-                key={"k" + i}
-                style={{
-                  paddingBottom: "5px",
-                  paddingTop: "5px",
-                  color:
-                    k === sortByColumn ? theme.palette.info.dark : undefined,
-                }}
-                onClick={() => {
-                  handleColumnClick(k);
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    height: "1rem",
-                    marginLeft: "5px",
-                  }}
-                >
-                  <Typography variant="h6">{toTitleCase(k)}</Typography>
-                  <div
+            {keys.map(
+              (k, i) =>
+                visibleColumns[k] && (
+                  <th
+                    key={"k" + i}
                     style={{
-                      minWidth: "20px",
-                      maxWidth: "30px",
-                      paddingRight: "2px",
-                      paddingTop: "3px",
+                      paddingBottom: "5px",
+                      paddingTop: "5px",
+                      color:
+                        k === sortByColumn
+                          ? theme.palette.info.dark
+                          : undefined,
+                    }}
+                    onClick={() => {
+                      handleColumnClick(k);
                     }}
                   >
-                    {getSortIcon(k)}
-                  </div>
-                </div>
-              </th>
-            ))}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        height: "1rem",
+                        marginLeft: "5px",
+                      }}
+                    >
+                      <Typography variant="h6">{toTitleCase(k)}</Typography>
+                      <div
+                        style={{
+                          minWidth: "20px",
+                          maxWidth: "30px",
+                          paddingRight: "2px",
+                          paddingTop: "3px",
+                        }}
+                      >
+                        {getSortIcon(k)}
+                      </div>
+                    </div>
+                  </th>
+                )
+            )}
           </tr>
         </thead>
         <tbody>
@@ -146,29 +151,31 @@ export const TableDisplay = <T extends TableData>({
                   borderBottom: "1px solid gray",
                 }}
               >
-                {visibleColumns.map((cell, j) => {
+                {keys.map((cell, j) => {
                   const resultKey = cell as keyof T;
                   return (
-                    <td
-                      key={"r" + i + "c" + j}
-                      style={{
-                        whiteSpace: "nowrap",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          padding: "2px 3px 2px 5px",
-                          backgroundColor:
-                            resultKey === sortByColumn
-                              ? theme.palette.info.light
-                              : undefined,
+                    visibleColumns[cell] && (
+                      <td
+                        key={"r" + i + "c" + j}
+                        style={{
+                          whiteSpace: "nowrap",
+                          alignItems: "center",
                         }}
                       >
-                        {entry[resultKey] as string}
-                      </Typography>
-                    </td>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            padding: "2px 3px 2px 5px",
+                            backgroundColor:
+                              resultKey === sortByColumn
+                                ? theme.palette.info.light
+                                : undefined,
+                          }}
+                        >
+                          {(entry[resultKey] as string).toString()}
+                        </Typography>
+                      </td>
+                    )
                   );
                 })}
               </tr>

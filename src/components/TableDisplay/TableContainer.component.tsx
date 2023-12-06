@@ -1,30 +1,49 @@
 import { useMemo, useState } from "react";
 import { TableData } from "../../types/TableData";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { TableDisplay } from "./TableDisplay.component";
+import TableConfigPanel from "./TableConfigPanel.component";
+import { fetchDataByType } from "./TableDataParser.util";
 
-type Props<T extends TableData> = {
-  data: T[];
+type Props = {
+  data: RawResultData[];
   resultId: string;
+  dataType: RawResultTypes;
 };
 
-const TableContainer = <T extends TableData>({ data, resultId }: Props<T>) => {
+const TableContainer = <T extends TableData>({
+  data,
+  resultId,
+  dataType,
+}: Props) => {
+  const [visibleColumns, setVisibleColumns] = useState<{
+    [key in keyof T]: boolean;
+  }>();
+
+  const tableData = fetchDataByType<T>(dataType, data);
+
   const keys: (keyof T)[] = useMemo(() => {
-    const egKeys = Object.keys(data[0]);
+    const egKeys = Object.keys(tableData[0]);
     const finalKeys = egKeys as (keyof T)[];
+    const candidateKeys: { [key in keyof T]: boolean } = {};
+    finalKeys.map((key) => {
+      candidateKeys[key] = true;
+    });
+    setVisibleColumns(candidateKeys);
+    console.log(finalKeys);
     return finalKeys;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resultId]);
+  }, [resultId, data]);
 
-  const [visibleColumns, setVisibleColumns] = useState<(keyof T)[]>(keys);
-
-  return (
+  return visibleColumns ? (
     <Box>
-      <TableDisplay<T> {...{ data, visibleColumns }} />
-      <Button>
-        <Typography variant="body2">Click Me!</Typography>
-      </Button>
+      <TableDisplay<T> {...{ keys, data: tableData, visibleColumns }} />
+      <TableConfigPanel<T> {...{ visibleColumns, setVisibleColumns, keys }} />
     </Box>
+  ) : (
+    <Typography variant="body1">
+      There was a problem with your table data. Please try again
+    </Typography>
   );
 };
 

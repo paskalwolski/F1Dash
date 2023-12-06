@@ -3,8 +3,8 @@ export type TableData =
   | QualiResultTableData
   | SprintResultTableData
   | ConstructorStandingTableData
-  | DriverStandingTableData
-  | object;
+  | DriverStandingTableData;
+// | object;
 
 export type RaceResultTableData = {
   number: number;
