@@ -17,15 +17,15 @@ const TableContainer = <T extends TableData>({
   dataType,
 }: Props) => {
   const [visibleColumns, setVisibleColumns] = useState<{
-    [key in keyof T]: boolean;
-  }>();
+    [key in keyof T]?: boolean;
+  }>({});
 
   const tableData = fetchDataByType<T>(dataType, data);
 
   const keys: (keyof T)[] = useMemo(() => {
     const egKeys = Object.keys(tableData[0]);
     const finalKeys = egKeys as (keyof T)[];
-    const candidateKeys: { [key in keyof T]: boolean } = {};
+    const candidateKeys: { [key in keyof T]?: boolean } = {};
     finalKeys.map((key) => {
       candidateKeys[key] = true;
     });

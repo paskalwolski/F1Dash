@@ -2,9 +2,9 @@ import { Box, Typography } from "@mui/material";
 import { TableData } from "../../types/TableData";
 
 type Props<T extends TableData> = {
-  visibleColumns: { [key in keyof T]: boolean };
+  visibleColumns: { [key in keyof T]?: boolean };
   setVisibleColumns: React.Dispatch<
-    React.SetStateAction<{ [key in keyof T]: boolean } | undefined>
+    React.SetStateAction<{ [key in keyof T]?: boolean }>
   >;
   keys: (keyof T)[];
 };

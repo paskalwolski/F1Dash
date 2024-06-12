@@ -9,7 +9,7 @@ import { Box, Typography, useTheme } from "@mui/material";
 type Props<T extends TableData> = {
   keys: (keyof T)[];
   data: T[];
-  visibleColumns: { [key in keyof T]: boolean };
+  visibleColumns: { [key in keyof T]?: boolean };
 };
 export const TableDisplay = <T extends TableData>({
   keys,
